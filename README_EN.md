@@ -10,17 +10,19 @@
 
 **An MBTI test with zero multiple-choice questions. Just chat, and get your personality type.**
 
-Most 90+ question MBTI tests lose people halfway through — they start clicking randomly. Psychology calls this **Social Desirability Bias**: people unconsciously pick the "better version of me" instead of the real one on questionnaires. Multiple-choice questions don't measure who you are. They measure who you wish you were.
+Most 90+ question MBTI tests lose people halfway through — they start clicking randomly.
+
+Psychology calls this **Social Desirability Bias**: people unconsciously beautify themselves on questionnaires, picking the better version instead of the real one. Multiple-choice questions don't measure who you are. They measure who you wish you were.
 
 talk-mbti takes a different approach: it just talks to you. About anything — work, hobbies, recent worries, a decision you made last week. The AI extracts real behavioral signals from your word choices, gut reactions, and decision-making logic. After the chat, you get a full report with four-dimension percentages, cognitive function stack, strengths, and growth areas.
 
-Multiple-choice is a low-bandwidth channel. Natural conversation is high-bandwidth. In the same 10 minutes, chatting reveals far more than ticking boxes.
-
 **👉 Try it: https://mbti.charles-cheng.com**
 
-## Tech Stack
-
-Vue 3 + Vite + TailwindCSS / Gemini 2.0 Flash / Cloudflare Workers + AI Gateway / Supabase / GitHub Pages
+<p align="center">
+  <img src="mbti-images/home-page.png" width="280" />
+  <img src="mbti-images/chat.png" width="280" />
+  <img src="mbti-images/report_1.png" width="280" />
+</p>
 
 ## License
 
