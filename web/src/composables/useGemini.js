@@ -36,7 +36,7 @@ export function useGemini() {
       model: 'gemini-2.0-flash',
       systemInstruction: systemPrompt,
       generationConfig: {
-        temperature: 0.9,
+        temperature: 0.75,
         topP: 0.95,
         maxOutputTokens: 2048,
       },
