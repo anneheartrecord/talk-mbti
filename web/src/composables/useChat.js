@@ -1,42 +1,36 @@
-import { ref, computed, reactive } from 'vue'
+import { ref, computed } from 'vue'
 import { useGemini } from './useGemini'
 import { buildChatSystemPrompt, buildReportPrompt } from '../prompts/system'
 import { END_KEYWORDS } from '../constants/tags'
 
 /**
  * 对话状态管理 composable
- * 管理整个对话流程：初始化 → 聊天 → 结束 → 生成报告
  */
 export function useChat() {
   const messages = ref([]) // [{role: 'user'|'assistant', content: string}]
   const userTags = ref({})
   const currentRound = ref(0)
-  const maxRounds = 30
+  const maxRounds = ref(30) // 可调轮次
   const isFinished = ref(false)
   const isGeneratingReport = ref(false)
   const report = ref(null)
+  const canSkip = computed(() => currentRound.value >= 10) // 10轮后可跳过
   const gemini = useGemini()
 
-  const progress = computed(() => Math.min((currentRound.value / maxRounds) * 100, 100))
+  const progress = computed(() => Math.min((currentRound.value / maxRounds.value) * 100, 100))
 
-  /**
-   * 初始化对话
-   * @param {Object} tags - 用户选择的标签
-   */
-  function initChat(tags) {
+  function initChat(tags, rounds = 30) {
     userTags.value = tags
     messages.value = []
     currentRound.value = 0
+    maxRounds.value = rounds
     isFinished.value = false
     report.value = null
 
-    const systemPrompt = buildChatSystemPrompt(tags)
+    const systemPrompt = buildChatSystemPrompt(tags, rounds)
     gemini.init(systemPrompt)
   }
 
-  /**
-   * 检查用户输入是否是结束指令
-   */
   function isEndCommand(text) {
     const trimmed = text.trim().toLowerCase()
     return END_KEYWORDS.some(kw => trimmed.includes(kw.toLowerCase()))
@@ -44,9 +38,8 @@ export function useChat() {
 
   /**
    * 发送消息
-   * @param {string} text - 用户输入
-   * @param {function} onChunk - 流式回调
-   * @returns {Promise<string|object>} 回复文本或报告对象
+   * 注意：这里不 push assistant 消息！由调用方通过 onChunk 回调管理。
+   * onChunk 会在流式输出时被调用，调用方负责创建/更新 assistant 消息。
    */
   async function sendMessage(text, onChunk) {
     // 添加用户消息
@@ -59,35 +52,28 @@ export function useChat() {
     }
 
     // 检查是否到达轮次上限
-    if (currentRound.value >= maxRounds) {
-      // 先发最后一轮消息
-      const reply = await gemini.sendMessageStream(text, onChunk)
-      messages.value.push({ role: 'assistant', content: reply })
-      // 然后生成报告
+    if (currentRound.value >= maxRounds.value) {
+      // 最后一轮正常对话，然后生成报告
+      await gemini.sendMessageStream(text, onChunk)
       return await generateReport()
     }
 
-    // 正常对话
+    // 正常对话（不 push assistant 消息，由 onChunk 回调处理）
     const reply = await gemini.sendMessageStream(text, onChunk)
-    messages.value.push({ role: 'assistant', content: reply })
     return reply
   }
 
   /**
-   * 获取 AI 的开场白
+   * 获取 AI 开场白（同样不 push，由调用方处理）
    */
   async function getGreeting(onChunk) {
     const greeting = await gemini.sendMessageStream(
       '[系统指令：请根据用户的标签信息，发出第一句打招呼的话，自然开启对话。不要暴露你在做分析。]',
       onChunk
     )
-    messages.value.push({ role: 'assistant', content: greeting })
     return greeting
   }
 
-  /**
-   * 生成最终报告
-   */
   async function generateReport() {
     isFinished.value = true
     isGeneratingReport.value = true
@@ -106,7 +92,7 @@ export function useChat() {
       }
     } catch (e) {
       console.error('报告生成失败:', e)
-      // 回退：尝试再生成一次
+      // 重试一次
       try {
         const prompt = buildReportPrompt(userTags.value, messages.value)
         const rawText = await gemini.generateStream(prompt)
@@ -133,6 +119,7 @@ export function useChat() {
     progress,
     isFinished,
     isGeneratingReport,
+    canSkip,
     report,
     loading: gemini.loading,
     error: gemini.error,

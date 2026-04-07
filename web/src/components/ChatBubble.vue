@@ -1,24 +1,27 @@
 <template>
   <div
-    class="flex mb-5 animate-fade-in"
-    :class="isUser ? 'justify-end' : 'justify-start'"
+    class="flex items-start gap-4 py-3"
+    :class="isUser ? 'flex-row-reverse' : ''"
   >
     <!-- AI 头像 -->
-    <div v-if="!isUser" class="flex-shrink-0 w-9 h-9 rounded-full bg-[#F0EEFF] flex items-center justify-center text-lg mr-2.5 mt-1">
+    <div
+      v-if="!isUser"
+      class="flex-shrink-0 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-lg"
+    >
       🔮
     </div>
 
-    <!-- 气泡 -->
+    <!-- 消息内容 -->
     <div
-      class="max-w-[78%] px-4 py-3 rounded-2xl whitespace-pre-wrap break-words text-[15px] leading-relaxed shadow-sm"
+      class="max-w-[85%] text-base leading-relaxed whitespace-pre-wrap break-words"
       :class="isUser
-        ? 'bg-[#5A4BD1] text-white rounded-br-sm'
-        : 'bg-[#F0EEFF] text-gray-800 rounded-bl-sm'"
+        ? 'bg-gray-50 rounded-2xl rounded-tr-sm px-5 py-3.5 text-gray-800'
+        : 'text-gray-800 pt-1'"
     >
       {{ message.content }}
       <span
         v-if="isStreaming && !isUser"
-        class="inline-block w-1 h-4 ml-0.5 bg-gray-400 align-middle animate-blink"
+        class="inline-block w-0.5 h-5 ml-0.5 bg-gray-400 align-middle animate-blink"
       />
     </div>
   </div>
@@ -28,28 +31,17 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  message: {
-    type: Object,
-    required: true,
-  },
-  isStreaming: {
-    type: Boolean,
-    default: false,
-  },
+  message: { type: Object, required: true },
+  isStreaming: { type: Boolean, default: false },
 })
 
 const isUser = computed(() => props.message.role === 'user')
 </script>
 
 <style>
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
-.animate-fade-in { animation: fade-in 0.3s ease-out both; }
 .animate-blink { animation: blink 0.8s step-end infinite; }
 </style>

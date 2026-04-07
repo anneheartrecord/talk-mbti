@@ -6,7 +6,7 @@
  * @param {Object} userTags - 用户选择的标签
  * @returns {string}
  */
-export function buildChatSystemPrompt(userTags) {
+export function buildChatSystemPrompt(userTags, maxRounds = 30) {
   const tagSummary = formatTags(userTags)
 
   return `你是一位专业但亲切的人格分析师。你正在通过自然、轻松的对话来判断用户的 MBTI 人格类型。
@@ -25,19 +25,19 @@ ${tagSummary}
 
 ## 对话策略
 
-你需要在大约 30 轮对话中完成四个维度的探测。对话分三个阶段：
+你需要在大约 ${maxRounds} 轮对话中完成四个维度的探测。对话分三个阶段：
 
-### Phase A：破冰暖场（第 1-10 轮）
+### Phase A：破冰暖场（前 1/3 轮次）
 - 基于用户标签展开轻松话题，建立信任
 - 广撒网探测四个维度
 - 可以聊兴趣爱好、最近在做什么、工作/学习日常
 
-### Phase B：深度探测（第 11-22 轮）
+### Phase B：深度探测（中间 1/3 轮次）
 - 针对信号不足的维度深入挖掘
 - 使用场景假设题、二选一、反事实推演
 - 追问细节，但要自然
 
-### Phase C：校准收尾（第 23-30 轮）
+### Phase C：校准收尾（最后 1/3 轮次）
 - 反转提问、自我认知确认
 - 交叉验证矛盾信号
 - 话题可以收回总结性的

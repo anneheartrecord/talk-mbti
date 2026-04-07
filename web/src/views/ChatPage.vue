@@ -1,35 +1,44 @@
 <template>
-  <div class="h-screen flex flex-col bg-gray-50">
-    <!-- 顶部固定栏 -->
-    <header class="flex-shrink-0 bg-[#6C5CE7] px-4 py-3 flex items-center gap-3 safe-top">
-      <!-- 返回按钮 -->
+  <div class="h-screen flex flex-col bg-white">
+    <!-- 顶部固定栏：极简 -->
+    <header class="flex-shrink-0 border-b border-gray-100 px-6 py-4 flex items-center justify-between safe-top">
       <button
         @click="$router.back()"
-        class="text-white text-xl leading-none cursor-pointer"
+        class="text-gray-400 hover:text-gray-700 text-lg cursor-pointer transition-colors"
       >
-        ←
+        ← 返回
       </button>
 
-      <!-- 中间标题 -->
-      <span class="text-white font-semibold text-base flex-shrink-0">
-        聊天中 ({{ currentRound }}/{{ maxRounds }})
-      </span>
+      <span class="text-gray-400 text-sm tabular-nums">{{ currentRound }} / {{ maxRounds }}</span>
 
-      <!-- 进度条 -->
-      <div class="flex-1 min-w-0">
-        <ProgressBar :current="currentRound" :max="maxRounds" :progress="progress" />
-      </div>
+      <!-- 10轮后出现跳过按钮 -->
+      <button
+        v-if="canSkip && !isFinished"
+        @click="handleSkipToReport"
+        class="text-purple-500 hover:text-purple-700 text-sm font-medium cursor-pointer transition-colors"
+      >
+        结束对话，出报告 →
+      </button>
+      <span v-else class="w-20"></span>
     </header>
+
+    <!-- 进度条 -->
+    <div class="h-0.5 bg-gray-100">
+      <div
+        class="h-full bg-gray-900 transition-all duration-700 ease-out"
+        :style="{ width: progress + '%' }"
+      ></div>
+    </div>
 
     <!-- 消息区域 -->
     <main
       ref="messageContainer"
-      class="flex-1 overflow-y-auto px-4 py-4 space-y-1"
+      class="flex-1 overflow-y-auto px-6 py-6 max-w-2xl mx-auto w-full"
     >
-      <!-- 报告生成中提示 -->
+      <!-- 报告生成中 -->
       <div v-if="isGeneratingReport" class="flex flex-col items-center justify-center py-20 gap-4">
-        <div class="text-4xl animate-spin-slow">🔮</div>
-        <p class="text-gray-500 text-sm">正在生成你的 MBTI 报告...</p>
+        <div class="text-5xl animate-spin-slow">🔮</div>
+        <p class="text-gray-400 text-base">正在生成你的 MBTI 报告...</p>
       </div>
 
       <template v-else>
@@ -40,7 +49,6 @@
           :isStreaming="idx === messages.length - 1 && msg.role === 'assistant' && loading"
         />
 
-        <!-- 流式输出中：如果最后一条不是 assistant（即 AI 还没开始回复），显示打字指示器 -->
         <TypingIndicator
           v-if="loading && (messages.length === 0 || messages[messages.length - 1].role !== 'assistant' || !streamingText)"
         />
@@ -48,28 +56,25 @@
     </main>
 
     <!-- 底部输入栏 -->
-    <footer class="flex-shrink-0 bg-white border-t border-gray-200 px-4 py-3 safe-bottom">
-      <!-- 错误提示 -->
-      <div v-if="error" class="text-red-500 text-xs mb-2 px-1">
-        {{ error }}
-      </div>
+    <footer class="flex-shrink-0 border-t border-gray-100 px-6 py-4 safe-bottom max-w-2xl mx-auto w-full">
+      <div v-if="error" class="text-red-400 text-sm mb-3">{{ error }}</div>
 
-      <div class="flex items-end gap-2">
+      <div class="flex items-end gap-3">
         <textarea
           ref="inputRef"
           v-model="inputText"
           :disabled="loading || isFinished"
           @keydown="handleKeydown"
           rows="1"
-          :placeholder="loading ? 'AI 正在回复...' : '输入消息...'"
-          class="flex-1 resize-none rounded-2xl border border-gray-300 px-4 py-2.5 text-[15px] leading-snug max-h-32 overflow-y-auto focus:outline-none focus:border-[#6C5CE7] focus:ring-1 focus:ring-[#6C5CE7]/30 disabled:bg-gray-100 disabled:text-gray-400 transition-colors"
+          :placeholder="loading ? '对方正在输入...' : '输入你的回复'"
+          class="flex-1 resize-none rounded-xl border border-gray-200 bg-gray-50 px-5 py-3.5 text-base leading-relaxed max-h-32 overflow-y-auto focus:outline-none focus:border-gray-400 focus:bg-white disabled:opacity-50 transition-all"
         />
         <button
           @click="handleSend"
           :disabled="loading || isFinished || !inputText.trim()"
-          class="flex-shrink-0 w-10 h-10 rounded-full bg-[#6C5CE7] text-white flex items-center justify-center text-lg cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 transition-all"
+          class="flex-shrink-0 w-11 h-11 rounded-xl bg-gray-900 text-white flex items-center justify-center text-lg cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed active:scale-95 transition-all"
         >
-          ↑
+          ↵
         </button>
       </div>
     </footer>
@@ -82,7 +87,6 @@ import { useRouter } from 'vue-router'
 import { useChat } from '../composables/useChat'
 import ChatBubble from '../components/ChatBubble.vue'
 import TypingIndicator from '../components/TypingIndicator.vue'
-import ProgressBar from '../components/ProgressBar.vue'
 
 const router = useRouter()
 const inputText = ref('')
@@ -96,6 +100,7 @@ const {
   progress,
   isFinished,
   isGeneratingReport,
+  canSkip,
   loading,
   streamingText,
   error,
@@ -107,7 +112,6 @@ const {
   report,
 } = useChat()
 
-// 自动滚动到底部
 function scrollToBottom() {
   nextTick(() => {
     if (messageContainer.value) {
@@ -116,13 +120,10 @@ function scrollToBottom() {
   })
 }
 
-// 监听消息变化和流式文本变化，自动滚底
 watch([messages, streamingText], scrollToBottom, { deep: true })
 
-// 监听 isFinished，跳转 /report
 watch(isFinished, (val) => {
   if (!val) return
-  // 等待报告生成完成
   const unwatch = watch(isGeneratingReport, (generating) => {
     if (!generating && report.value) {
       sessionStorage.setItem('mbti_report', JSON.stringify(report.value))
@@ -133,25 +134,21 @@ watch(isFinished, (val) => {
   }, { immediate: true })
 })
 
-// 流式回调：更新最后一条 assistant 消息的 content
+// 流式回调：创建或更新最后一条 assistant 消息
 function onChunk(chunk) {
   const last = messages.value[messages.value.length - 1]
   if (last && last.role === 'assistant') {
     last.content = chunk
   } else {
-    // AI 还没有消息，创建一条
     messages.value.push({ role: 'assistant', content: chunk })
   }
 }
 
-// 发送消息
 async function handleSend() {
   const text = inputText.value.trim()
   if (!text || loading.value || isFinished.value) return
-
   inputText.value = ''
 
-  // 如果是结束指令，提前显示生成提示
   if (isEndCommand(text)) {
     messages.value.push({ role: 'user', content: text })
     await generateReport()
@@ -161,7 +158,10 @@ async function handleSend() {
   await sendMessage(text, onChunk)
 }
 
-// Enter 发送，Shift+Enter 换行
+async function handleSkipToReport() {
+  await generateReport()
+}
+
 function handleKeydown(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault()
@@ -169,7 +169,6 @@ function handleKeydown(e) {
   }
 }
 
-// textarea 自适应高度
 watch(inputText, () => {
   nextTick(() => {
     if (inputRef.value) {
@@ -179,18 +178,14 @@ watch(inputText, () => {
   })
 })
 
-// 初始化
 onMounted(async () => {
   const tagsStr = sessionStorage.getItem('mbti_tags')
   if (!tagsStr) {
     router.replace('/tags')
     return
   }
-
   const tags = JSON.parse(tagsStr)
   initChat(tags)
-
-  // 获取 AI 开场白
   await getGreeting(onChunk)
 })
 </script>
@@ -201,8 +196,6 @@ onMounted(async () => {
   to { transform: rotate(360deg); }
 }
 .animate-spin-slow { animation: spin-slow 2s linear infinite; }
-
-/* 安全区域适配 */
-.safe-top { padding-top: max(0.75rem, env(safe-area-inset-top)); }
-.safe-bottom { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
+.safe-top { padding-top: max(1rem, env(safe-area-inset-top)); }
+.safe-bottom { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
 </style>

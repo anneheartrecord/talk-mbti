@@ -1,15 +1,15 @@
 <template>
-  <div class="flex justify-start mb-4">
+  <div class="flex items-start gap-4 py-3">
     <!-- AI 头像 -->
-    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-[#F0EEFF] flex items-center justify-center text-base mr-2 mt-1">
+    <div class="flex-shrink-0 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-lg">
       🔮
     </div>
 
-    <!-- 打字指示器气泡 -->
-    <div class="bg-[#F0EEFF] rounded-2xl rounded-bl-sm px-5 py-3 flex items-center gap-1.5">
-      <span class="w-2 h-2 bg-gray-400 rounded-full animate-typing-dot-1" />
-      <span class="w-2 h-2 bg-gray-400 rounded-full animate-typing-dot-2" />
-      <span class="w-2 h-2 bg-gray-400 rounded-full animate-typing-dot-3" />
+    <!-- 打字指示器 -->
+    <div class="flex items-center gap-1.5 pt-2.5">
+      <span class="w-2 h-2 bg-gray-300 rounded-full animate-typing-dot-1" />
+      <span class="w-2 h-2 bg-gray-300 rounded-full animate-typing-dot-2" />
+      <span class="w-2 h-2 bg-gray-300 rounded-full animate-typing-dot-3" />
     </div>
   </div>
 </template>
@@ -19,8 +19,8 @@
 
 <style>
 @keyframes typing-bounce {
-  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-  30% { transform: translateY(-6px); opacity: 1; }
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
+  30% { transform: translateY(-5px); opacity: 1; }
 }
 .animate-typing-dot-1 { animation: typing-bounce 1.2s ease-in-out infinite; }
 .animate-typing-dot-2 { animation: typing-bounce 1.2s ease-in-out 0.2s infinite; }
