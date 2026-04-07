@@ -2,20 +2,21 @@ import { ref, computed } from 'vue'
 import { useGemini } from './useGemini'
 import { buildChatSystemPrompt, buildReportPrompt } from '../prompts/system'
 import { END_KEYWORDS } from '../constants/tags'
-import { saveResult } from '../lib/supabase'
+import { saveResult, saveDraft, loadDraft } from '../lib/supabase'
 
-/**
- * 对话状态管理 composable
- */
+const DRAFT_INTERVAL = 5 // 每 5 轮保存一次草稿
+
 export function useChat() {
-  const messages = ref([]) // [{role: 'user'|'assistant', content: string}]
+  const messages = ref([])
   const userTags = ref({})
   const currentRound = ref(0)
-  const maxRounds = ref(30) // 可调轮次
+  const maxRounds = ref(30)
   const isFinished = ref(false)
   const isGeneratingReport = ref(false)
   const report = ref(null)
-  const canSkip = computed(() => currentRound.value >= 10) // 10轮后可跳过
+  const canSkip = computed(() => currentRound.value >= 10)
+  const sessionId = ref(null) // 会话 ID，用于草稿保存
+  const hasDraft = ref(false) // 是否有未完成的草稿
   const gemini = useGemini()
 
   const progress = computed(() => Math.min((currentRound.value / maxRounds.value) * 100, 100))
@@ -27,9 +28,38 @@ export function useChat() {
     maxRounds.value = rounds
     isFinished.value = false
     report.value = null
+    sessionId.value = crypto.randomUUID()
 
     const systemPrompt = buildChatSystemPrompt(tags, rounds)
     gemini.init(systemPrompt)
+  }
+
+  /**
+   * 检查是否有未完成的草稿
+   */
+  async function checkDraft() {
+    const draft = await loadDraft()
+    if (draft && draft.messages && draft.messages.length > 0) {
+      hasDraft.value = true
+      return draft
+    }
+    hasDraft.value = false
+    return null
+  }
+
+  /**
+   * 从草稿恢复对话
+   */
+  function restoreFromDraft(draft) {
+    sessionId.value = draft.id
+    messages.value = draft.messages || []
+    currentRound.value = draft.round_count || 0
+    userTags.value = draft.user_tags || {}
+
+    const systemPrompt = buildChatSystemPrompt(userTags.value, maxRounds.value)
+    gemini.init(systemPrompt)
+    // 注意：恢复后 Gemini 的对话历史丢失了，但 system prompt 还在
+    // AI 会根据 messages 中的上下文继续对话
   }
 
   function isEndCommand(text) {
@@ -38,35 +68,36 @@ export function useChat() {
   }
 
   /**
-   * 发送消息
-   * 注意：这里不 push assistant 消息！由调用方通过 onChunk 回调管理。
-   * onChunk 会在流式输出时被调用，调用方负责创建/更新 assistant 消息。
+   * 每 5 轮自动保存草稿
    */
+  function maybeSaveDraft() {
+    if (currentRound.value > 0 && currentRound.value % DRAFT_INTERVAL === 0) {
+      saveDraft(sessionId.value, messages.value, userTags.value, currentRound.value)
+        .catch(e => console.warn('[Supabase] 草稿保存失败:', e))
+    }
+  }
+
   async function sendMessage(text, onChunk) {
-    // 添加用户消息
     messages.value.push({ role: 'user', content: text })
     currentRound.value++
 
-    // 检查是否是结束指令
     if (isEndCommand(text)) {
       return await generateReport()
     }
 
-    // 检查是否到达轮次上限
     if (currentRound.value >= maxRounds.value) {
-      // 最后一轮正常对话，然后生成报告
       await gemini.sendMessageStream(text, onChunk)
       return await generateReport()
     }
 
-    // 正常对话（不 push assistant 消息，由 onChunk 回调处理）
     const reply = await gemini.sendMessageStream(text, onChunk)
+
+    // 每 5 轮自动保存草稿
+    maybeSaveDraft()
+
     return reply
   }
 
-  /**
-   * 获取 AI 开场白（同样不 push，由调用方处理）
-   */
   async function getGreeting(onChunk) {
     const greeting = await gemini.sendMessageStream(
       '[系统指令：请根据用户的标签信息，发出第一句打招呼的话，自然开启对话。不要暴露你在做分析。]',
@@ -83,7 +114,6 @@ export function useChat() {
       const prompt = buildReportPrompt(userTags.value, messages.value)
       const rawText = await gemini.generateStream(prompt)
 
-      // 提取 JSON
       const jsonMatch = rawText.match(/```json\s*([\s\S]*?)\s*```/) || rawText.match(/\{[\s\S]*\}/)
       if (jsonMatch) {
         const jsonStr = jsonMatch[1] || jsonMatch[0]
@@ -93,7 +123,6 @@ export function useChat() {
       }
     } catch (e) {
       console.error('报告生成失败:', e)
-      // 重试一次
       try {
         const prompt = buildReportPrompt(userTags.value, messages.value)
         const rawText = await gemini.generateStream(prompt)
@@ -109,10 +138,10 @@ export function useChat() {
       isGeneratingReport.value = false
     }
 
-    // 异步保存到 Supabase（不阻塞 UI）
+    // 保存最终报告 + 标记会话完成
     if (report.value) {
-      saveResult(report.value, messages.value, userTags.value, currentRound.value)
-        .then(id => { if (id) console.log('[Supabase] 已保存, id:', id) })
+      saveResult(report.value, messages.value, userTags.value, currentRound.value, sessionId.value)
+        .then(id => { if (id) console.log('[Supabase] 报告已保存, id:', id) })
         .catch(e => console.warn('[Supabase] 保存失败:', e))
     }
 
@@ -128,6 +157,8 @@ export function useChat() {
     isFinished,
     isGeneratingReport,
     canSkip,
+    hasDraft,
+    sessionId,
     report,
     loading: gemini.loading,
     error: gemini.error,
@@ -137,5 +168,7 @@ export function useChat() {
     getGreeting,
     generateReport,
     isEndCommand,
+    checkDraft,
+    restoreFromDraft,
   }
 }
