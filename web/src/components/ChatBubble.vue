@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-start gap-3 py-4"
+    class="flex items-start gap-4 py-4"
     :class="isUser ? 'flex-row-reverse' : ''"
   >
     <!-- 头像 -->
@@ -13,7 +13,7 @@
 
     <!-- 消息气泡 -->
     <div
-      class="max-w-[78%] px-4 py-3.5 rounded-2xl text-base leading-relaxed whitespace-pre-wrap break-words"
+      class="max-w-[78%] px-5 py-4 rounded-2xl text-base leading-relaxed whitespace-pre-wrap break-words"
       :class="isUser
         ? 'bg-blue-50 text-gray-800 rounded-tr-sm'
         : 'bg-gray-50 text-gray-800 rounded-tl-sm'"

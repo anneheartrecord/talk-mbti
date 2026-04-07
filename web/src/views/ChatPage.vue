@@ -3,19 +3,19 @@
     <div class="w-full max-w-xl h-[92vh] bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden">
 
       <!-- 顶部栏 -->
-      <header class="shrink-0 px-5 py-3.5 flex items-center justify-between border-b border-gray-100">
+      <header class="shrink-0 px-6 py-4 flex items-center justify-between border-b border-gray-100">
         <button
           @click="$router.back()"
-          class="text-gray-400 hover:text-gray-700 text-sm cursor-pointer transition-colors"
+          class="px-4 py-2 text-gray-400 hover:text-gray-700 text-sm cursor-pointer transition-colors rounded-lg hover:bg-gray-50"
         >
           ← 返回
         </button>
 
-        <!-- 出报告按钮：10轮后出现，醒目紫色 -->
+        <!-- 出报告按钮 -->
         <button
           v-if="canSkip && !isFinished && !loading"
           @click="handleSkipToReport"
-          class="px-4 py-1.5 bg-purple-600 text-white text-sm font-medium rounded-full hover:bg-purple-700 active:scale-95 transition-all cursor-pointer shadow-sm animate-fade-in"
+          class="px-6 py-2.5 bg-purple-600 text-white text-sm font-medium rounded-full hover:bg-purple-700 active:scale-95 transition-all cursor-pointer shadow-md animate-fade-in"
         >
           结束对话，生成报告 →
         </button>
@@ -33,11 +33,11 @@
       <!-- 消息区域 -->
       <main
         ref="messageContainer"
-        class="flex-1 overflow-y-auto px-5 py-4"
+        class="flex-1 overflow-y-auto px-6 py-6"
       >
-        <div v-if="isGeneratingReport" class="flex flex-col items-center justify-center h-full gap-4">
-          <div class="text-5xl animate-spin-slow">🔮</div>
-          <p class="text-gray-400 text-base">正在生成你的 MBTI 报告...</p>
+        <div v-if="isGeneratingReport" class="flex flex-col items-center justify-center h-full gap-6">
+          <div class="text-6xl animate-spin-slow">🔮</div>
+          <p class="text-gray-400 text-lg">正在生成你的 MBTI 报告...</p>
         </div>
 
         <template v-else>
@@ -55,10 +55,10 @@
       </main>
 
       <!-- 底部输入栏 -->
-      <footer class="shrink-0 border-t border-gray-100 px-5 py-3.5">
-        <div v-if="error" class="text-red-400 text-sm mb-2 px-1">{{ error }}</div>
+      <footer class="shrink-0 border-t border-gray-100 px-6 py-5">
+        <div v-if="error" class="text-red-400 text-sm mb-3 px-1">{{ error }}</div>
 
-        <div class="flex items-end gap-3">
+        <div class="flex items-end gap-4">
           <textarea
             ref="inputRef"
             v-model="inputText"
@@ -66,12 +66,12 @@
             @keydown="handleKeydown"
             rows="3"
             :placeholder="loading ? '对方正在输入...' : '输入你的回复...'"
-            class="flex-1 resize-none rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-base leading-relaxed max-h-36 overflow-y-auto focus:outline-none focus:border-purple-300 focus:bg-white focus:ring-2 focus:ring-purple-50 disabled:opacity-40 transition-all"
+            class="flex-1 resize-none rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-base leading-relaxed max-h-40 overflow-y-auto focus:outline-none focus:border-purple-300 focus:bg-white focus:ring-2 focus:ring-purple-50 disabled:opacity-40 transition-all"
           />
           <button
             @click="handleSend"
             :disabled="loading || isFinished || !inputText.trim()"
-            class="shrink-0 w-11 h-11 rounded-xl bg-gray-900 text-white flex items-center justify-center text-base cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed active:scale-95 transition-all mb-1"
+            class="shrink-0 w-12 h-12 rounded-xl bg-gray-900 text-white flex items-center justify-center text-lg cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed active:scale-95 transition-all mb-1"
           >
             ↵
           </button>
@@ -108,7 +108,6 @@ function scrollToBottom() {
   })
 }
 
-// 自动聚焦输入框
 function focusInput() {
   nextTick(() => {
     if (inputRef.value && !loading.value && !isFinished.value) {
@@ -118,11 +117,7 @@ function focusInput() {
 }
 
 watch([messages, streamingText], scrollToBottom, { deep: true })
-
-// AI 回复完成后自动聚焦输入框
-watch(loading, (val) => {
-  if (!val) focusInput()
-})
+watch(loading, (val) => { if (!val) focusInput() })
 
 watch(isFinished, (val) => {
   if (!val) return
@@ -149,25 +144,18 @@ async function handleSend() {
   const text = inputText.value.trim()
   if (!text || loading.value || isFinished.value) return
   inputText.value = ''
-
   if (isEndCommand(text)) {
     messages.value.push({ role: 'user', content: text })
     await generateReport()
     return
   }
-
   await sendMessage(text, onChunk)
 }
 
-async function handleSkipToReport() {
-  await generateReport()
-}
+async function handleSkipToReport() { await generateReport() }
 
 function handleKeydown(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault()
-    handleSend()
-  }
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() }
 }
 
 onMounted(async () => {
