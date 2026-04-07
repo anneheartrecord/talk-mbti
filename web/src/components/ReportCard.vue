@@ -1,7 +1,7 @@
 <template>
   <div
     ref="cardRef"
-    class="bg-white rounded-2xl p-6 shadow-sm mb-4 transition-all duration-500"
+    class="bg-white rounded-2xl p-6 shadow-md mb-6 transition-all duration-500"
     :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
     :style="{ transitionDelay: delay + 'ms' }"
   >

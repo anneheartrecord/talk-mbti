@@ -1,18 +1,18 @@
 <template>
   <div
-    class="flex mb-4 animate-fade-in"
+    class="flex mb-5 animate-fade-in"
     :class="isUser ? 'justify-end' : 'justify-start'"
   >
     <!-- AI 头像 -->
-    <div v-if="!isUser" class="flex-shrink-0 w-8 h-8 rounded-full bg-[#F0EEFF] flex items-center justify-center text-base mr-2 mt-1">
+    <div v-if="!isUser" class="flex-shrink-0 w-9 h-9 rounded-full bg-[#F0EEFF] flex items-center justify-center text-lg mr-2.5 mt-1">
       🔮
     </div>
 
     <!-- 气泡 -->
     <div
-      class="max-w-[75%] px-4 py-3 rounded-2xl whitespace-pre-wrap break-words text-[15px] leading-relaxed"
+      class="max-w-[78%] px-4 py-3 rounded-2xl whitespace-pre-wrap break-words text-[15px] leading-relaxed shadow-sm"
       :class="isUser
-        ? 'bg-[#6C5CE7] text-white rounded-br-sm'
+        ? 'bg-[#5A4BD1] text-white rounded-br-sm'
         : 'bg-[#F0EEFF] text-gray-800 rounded-bl-sm'"
     >
       {{ message.content }}
