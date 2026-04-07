@@ -20,6 +20,7 @@
             <span :class="letterColor(3)">{{ report.type?.[3] }}</span>
           </div>
           <p class="text-gray-500" style="font-size: 20px; margin-top: 8px;">{{ report.headline }}</p>
+          <p v-if="report.portrait" class="text-gray-400 italic leading-relaxed" style="font-size: 16px; margin-top: 16px; padding: 0 12px;">{{ report.portrait }}</p>
           <div class="bg-purple-400 mx-auto rounded-full" style="width: 48px; height: 4px; margin-top: 28px;"></div>
         </div>
 
