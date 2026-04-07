@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { useGemini } from './useGemini'
 import { buildChatSystemPrompt, buildReportPrompt } from '../prompts/system'
 import { END_KEYWORDS } from '../constants/tags'
+import { saveResult } from '../lib/supabase'
 
 /**
  * 对话状态管理 composable
@@ -106,6 +107,13 @@ export function useChat() {
       }
     } finally {
       isGeneratingReport.value = false
+    }
+
+    // 异步保存到 Supabase（不阻塞 UI）
+    if (report.value) {
+      saveResult(report.value, messages.value, userTags.value, currentRound.value)
+        .then(id => { if (id) console.log('[Supabase] 已保存, id:', id) })
+        .catch(e => console.warn('[Supabase] 保存失败:', e))
     }
 
     return report.value
