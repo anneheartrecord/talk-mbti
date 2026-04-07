@@ -6,8 +6,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       padding: 20px;
+      padding-top: 60px;
     "
   >
     <!-- 标题 -->
@@ -21,173 +21,122 @@
     </div>
 
     <!-- 模式卡片列表 -->
-    <div style="width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 20px;">
+    <div style="width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 16px;">
+
       <!-- 标准版 -->
-      <div
-        @click="goTo('/tags')"
-        style="
-          background: #fff;
-          border-radius: 20px;
-          padding: 28px 24px;
-          cursor: pointer;
-          transition: all 0.25s ease;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-          position: relative;
-          overflow: hidden;
-        "
-        @mouseenter="hoverCard($event, true)"
-        @mouseleave="hoverCard($event, false)"
-      >
+      <div class="mode-card" @click="goTo('/tags')">
         <div style="display: flex; align-items: flex-start; gap: 16px;">
-          <span style="font-size: 44px; line-height: 1;">🔮</span>
+          <span style="font-size: 40px; line-height: 1;">🔮</span>
           <div style="flex: 1;">
-            <h2 style="font-size: 20px; font-weight: 700; color: #2d3436; margin: 0 0 6px;">
-              MBTI 人格测试
-            </h2>
-            <p style="font-size: 14px; color: #636e72; margin: 0 0 12px; line-height: 1.5;">
-              通过自然对话分析你的人格类型
-            </p>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <span
-                style="
-                  display: inline-block;
-                  padding: 4px 10px;
-                  border-radius: 20px;
-                  background: #e8f5e9;
-                  color: #2e7d32;
-                  font-size: 12px;
-                  font-weight: 600;
-                "
-              >免费</span>
-              <span style="font-size: 12px; color: #b2bec3;">· 约5分钟</span>
-            </div>
+            <h2 style="font-size: 18px; font-weight: 700; color: #2d3436; margin: 0 0 4px;">MBTI 人格测试</h2>
+            <p style="font-size: 13px; color: #636e72; margin: 0 0 8px; line-height: 1.4;">通过自然对话分析你的人格类型</p>
+            <span class="tag-free">免费 · 约5分钟</span>
           </div>
           <span style="color: #b2bec3; font-size: 20px; align-self: center;">›</span>
         </div>
       </div>
 
       <!-- 学生版 -->
-      <div
-        @click="goTo('/tags?mode=student')"
-        style="
-          background: #fff;
-          border-radius: 20px;
-          padding: 28px 24px;
-          cursor: pointer;
-          transition: all 0.25s ease;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-          position: relative;
-          overflow: hidden;
-        "
-        @mouseenter="hoverCard($event, true)"
-        @mouseleave="hoverCard($event, false)"
-      >
+      <div class="mode-card" @click="requireLoginThen('/tags?mode=student')">
         <div style="display: flex; align-items: flex-start; gap: 16px;">
-          <span style="font-size: 44px; line-height: 1;">🎓</span>
+          <span style="font-size: 40px; line-height: 1;">🎓</span>
           <div style="flex: 1;">
-            <h2 style="font-size: 20px; font-weight: 700; color: #2d3436; margin: 0 0 6px;">
-              学生专业推荐
-            </h2>
-            <p style="font-size: 14px; color: #636e72; margin: 0 0 12px; line-height: 1.5;">
-              分析人格类型 + 推荐匹配专业
-            </p>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <span
-                style="
-                  display: inline-block;
-                  padding: 4px 10px;
-                  border-radius: 20px;
-                  background: #e8f5e9;
-                  color: #2e7d32;
-                  font-size: 12px;
-                  font-weight: 600;
-                "
-              >免费</span>
-              <span style="font-size: 12px; color: #b2bec3;">· 约8分钟</span>
-            </div>
+            <h2 style="font-size: 18px; font-weight: 700; color: #2d3436; margin: 0 0 4px;">学生专业推荐</h2>
+            <p style="font-size: 13px; color: #636e72; margin: 0 0 8px; line-height: 1.4;">分析人格类型 + 推荐匹配专业</p>
+            <span class="tag-free">免费 · 约8分钟</span>
+          </div>
+          <span style="color: #b2bec3; font-size: 20px; align-self: center;">›</span>
+        </div>
+      </div>
+
+      <!-- MBTI 答疑 -->
+      <div class="mode-card" @click="requireLoginThen('/consult')">
+        <div style="display: flex; align-items: flex-start; gap: 16px;">
+          <span style="font-size: 40px; line-height: 1;">💬</span>
+          <div style="flex: 1;">
+            <h2 style="font-size: 18px; font-weight: 700; color: #2d3436; margin: 0 0 4px;">MBTI 答疑</h2>
+            <p style="font-size: 13px; color: #636e72; margin: 0 0 8px; line-height: 1.4;">输入你的 MBTI 和问题，获取个性化建议</p>
+            <span class="tag-paid">即将收费 · 当前免费体验</span>
           </div>
           <span style="color: #b2bec3; font-size: 20px; align-self: center;">›</span>
         </div>
       </div>
 
       <!-- 玄学版 -->
-      <div
-        @click="goTo('/birth-info')"
-        style="
-          background: #fff;
-          border-radius: 20px;
-          padding: 28px 24px;
-          cursor: pointer;
-          transition: all 0.25s ease;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-          position: relative;
-          overflow: hidden;
-        "
-        @mouseenter="hoverCard($event, true)"
-        @mouseleave="hoverCard($event, false)"
-      >
-        <!-- 付费角标 -->
-        <div
-          style="
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
-            color: #fff;
-            font-size: 12px;
-            font-weight: 700;
-          "
-        >¥9.9</div>
+      <div class="mode-card" @click="requireLoginThen('/birth-info')">
+        <div style="position: absolute; top: 12px; right: 12px; padding: 3px 10px; border-radius: 20px; background: linear-gradient(135deg, #6C5CE7, #a29bfe); color: #fff; font-size: 11px; font-weight: 700;">¥9.9</div>
         <div style="display: flex; align-items: flex-start; gap: 16px;">
-          <span style="font-size: 44px; line-height: 1;">🌙</span>
+          <span style="font-size: 40px; line-height: 1;">🌙</span>
           <div style="flex: 1;">
-            <h2 style="font-size: 20px; font-weight: 700; color: #2d3436; margin: 0 0 6px;">
-              八字 × MBTI 命理
-            </h2>
-            <p style="font-size: 14px; color: #636e72; margin: 0 0 12px; line-height: 1.5;">
-              结合出生八字和人格分析的综合报告
-            </p>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <span
-                style="
-                  display: inline-block;
-                  padding: 4px 10px;
-                  border-radius: 20px;
-                  background: #f3f0ff;
-                  color: #6C5CE7;
-                  font-size: 12px;
-                  font-weight: 600;
-                "
-              >¥9.9</span>
-              <span style="font-size: 12px; color: #b2bec3;">· 约10分钟</span>
-            </div>
+            <h2 style="font-size: 18px; font-weight: 700; color: #2d3436; margin: 0 0 4px;">八字 × MBTI 命理</h2>
+            <p style="font-size: 13px; color: #636e72; margin: 0 0 8px; line-height: 1.4;">结合出生八字和人格分析的综合报告</p>
+            <span class="tag-paid">¥9.9 · 约10分钟</span>
           </div>
           <span style="color: #b2bec3; font-size: 20px; align-self: center;">›</span>
         </div>
       </div>
+
     </div>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { useAuthGlobal } from '../composables/useAuth'
 
 const router = useRouter()
+const auth = useAuthGlobal()
 
 function goTo(path) {
   router.push(path)
 }
 
-function hoverCard(event, entering) {
-  const el = event.currentTarget
-  if (entering) {
-    el.style.transform = 'scale(1.02)'
-    el.style.boxShadow = '0 8px 32px rgba(108, 92, 231, 0.2)'
+// 高级功能需要登录
+function requireLoginThen(path) {
+  if (auth.isGuest.value) {
+    // 记住要去的页面，登录后跳转
+    sessionStorage.setItem('redirect_after_login', path)
+    router.push('/login')
   } else {
-    el.style.transform = 'scale(1)'
-    el.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)'
+    router.push(path)
   }
 }
 </script>
+
+<style scoped>
+.mode-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+.mode-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 24px rgba(108, 92, 231, 0.18);
+}
+.mode-card:active {
+  transform: scale(0.98);
+}
+.tag-free {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-size: 11px;
+  font-weight: 600;
+}
+.tag-paid {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: #f3f0ff;
+  color: #6C5CE7;
+  font-size: 11px;
+  font-weight: 600;
+}
+</style>

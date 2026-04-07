@@ -121,6 +121,31 @@
         </form>
       </div>
 
+      <!-- 社交登录 -->
+      <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.15);">
+        <p style="font-size: 13px; color: rgba(255,255,255,0.5); text-align: center; margin-bottom: 16px;">或使用第三方登录</p>
+        <div style="display: flex; justify-content: center; gap: 16px;">
+          <button
+            @click="handleOAuthLogin('google')"
+            class="flex items-center justify-center rounded-xl bg-white/20 backdrop-blur hover:bg-white/30 transition-all cursor-pointer"
+            style="width: 56px; height: 56px; font-size: 24px;"
+            title="Google 登录"
+          >📧</button>
+          <button
+            @click="handleOAuthLogin('wechat')"
+            class="flex items-center justify-center rounded-xl bg-white/20 backdrop-blur hover:bg-white/30 transition-all cursor-pointer"
+            style="width: 56px; height: 56px; font-size: 24px;"
+            title="微信登录（即将支持）"
+          >💬</button>
+          <button
+            @click="handleOAuthLogin('qq')"
+            class="flex items-center justify-center rounded-xl bg-white/20 backdrop-blur hover:bg-white/30 transition-all cursor-pointer"
+            style="width: 56px; height: 56px; font-size: 24px;"
+            title="QQ 登录（即将支持）"
+          >🐧</button>
+        </div>
+      </div>
+
       <!-- 访客入口 -->
       <div class="text-center" style="margin-top: 28px;">
         <button
@@ -139,6 +164,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthGlobal } from '../composables/useAuth'
+import { supabase } from '../lib/supabase'
 
 const router = useRouter()
 const auth = useAuthGlobal()
@@ -156,11 +182,21 @@ const registerForm = reactive({
   password: '',
 })
 
+function redirectAfterLogin() {
+  const redirect = sessionStorage.getItem('redirect_after_login')
+  if (redirect) {
+    sessionStorage.removeItem('redirect_after_login')
+    router.push(redirect)
+  } else {
+    router.push('/')
+  }
+}
+
 async function handleLogin() {
   auth.error.value = null
   const success = await auth.signIn(loginForm.email, loginForm.password)
   if (success) {
-    router.push('/')
+    redirectAfterLogin()
   }
 }
 
@@ -168,7 +204,23 @@ async function handleRegister() {
   auth.error.value = null
   const success = await auth.signUp(registerForm.email, registerForm.password, registerForm.nickname)
   if (success) {
-    router.push('/')
+    redirectAfterLogin()
+  }
+}
+
+async function handleOAuthLogin(provider) {
+  if (!supabase) return
+  auth.error.value = null
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: window.location.origin + window.location.pathname
+      }
+    })
+    if (error) auth.error.value = error.message
+  } catch (e) {
+    auth.error.value = e.message
   }
 }
 </script>

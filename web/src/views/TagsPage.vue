@@ -16,7 +16,7 @@
       <div class="flex-1 flex flex-col items-center justify-center" style="padding: 0 48px;">
         <transition name="slide" mode="out-in">
           <!-- 标签分类步骤 -->
-          <div v-if="currentStep < TAG_CATEGORIES.length" :key="currentStep" class="w-full">
+          <div v-if="currentStep < filteredCategories.length" :key="currentStep" class="w-full">
             <div class="text-center" style="margin-bottom: 48px;">
               <div style="font-size: 72px; margin-bottom: 28px;">{{ currentCategory.icon }}</div>
               <h2 class="font-bold text-gray-900" style="font-size: 26px; margin-bottom: 16px;">
@@ -52,7 +52,7 @@
           </div>
 
           <!-- 自定义标签步骤 -->
-          <div v-else-if="currentStep === TAG_CATEGORIES.length" :key="'custom'" class="w-full text-center">
+          <div v-else-if="currentStep === filteredCategories.length" :key="'custom'" class="w-full text-center">
             <div style="font-size: 72px; margin-bottom: 28px;">✏️</div>
             <h2 class="font-bold text-gray-900" style="font-size: 26px; margin-bottom: 16px;">还有什么想说的？</h2>
             <p class="text-gray-400" style="font-size: 16px; margin-bottom: 40px;">随便补充一句，让 AI 更了解你（可跳过）</p>
@@ -102,7 +102,7 @@
           class="rounded-full border-2 border-gray-800 bg-gray-800 text-white hover:bg-gray-700 active:scale-95 transition-all cursor-pointer"
           style="padding: 12px 28px; font-size: 15px;"
         >
-          {{ currentStep < TAG_CATEGORIES.length ? (hasSelection ? '下一步 ›' : '跳过 ›') : '开始对话 🔮' }}
+          {{ currentStep < filteredCategories.length ? (hasSelection ? '下一步 ›' : '跳过 ›') : '开始对话 🔮' }}
         </button>
       </div>
     </div>
@@ -119,13 +119,22 @@ const route = useRoute()
 const currentStep = ref(0)
 const customTag = ref('')
 
+// 学生版跳过职业方向标签
+const mode = computed(() => route.query.mode || 'standard')
+const filteredCategories = computed(() => {
+  if (mode.value === 'student') {
+    return TAG_CATEGORIES.filter(cat => cat.id !== 'career')
+  }
+  return TAG_CATEGORIES
+})
+
 const selections = reactive({})
 TAG_CATEGORIES.forEach((cat) => {
   selections[cat.id] = cat.type === 'multi' ? [] : ''
 })
 
-const allSteps = computed(() => [...TAG_CATEGORIES, { id: 'custom' }])
-const currentCategory = computed(() => TAG_CATEGORIES[currentStep.value])
+const allSteps = computed(() => [...filteredCategories.value, { id: 'custom' }])
+const currentCategory = computed(() => filteredCategories.value[currentStep.value])
 
 const hasSelection = computed(() => {
   if (currentStep.value >= TAG_CATEGORIES.length) return !!customTag.value.trim()
@@ -155,7 +164,7 @@ function toggleOption(option) {
   }
 }
 
-function next() { if (currentStep.value < TAG_CATEGORIES.length) currentStep.value++ }
+function next() { if (currentStep.value < filteredCategories.value.length) currentStep.value++ }
 function prev() { if (currentStep.value > 0) currentStep.value-- }
 
 function skipAll() {
@@ -167,7 +176,7 @@ function skipAll() {
 
 function handleStart() {
   const result = {}
-  TAG_CATEGORIES.forEach((cat) => {
+  filteredCategories.value.forEach((cat) => {
     const val = selections[cat.id]
     if (cat.type === 'multi' && Array.isArray(val) && val.length > 0) result[cat.id] = [...val]
     else if (cat.type === 'single' && val) result[cat.id] = val
@@ -180,7 +189,7 @@ function handleStart() {
 }
 
 function nextOrStart() {
-  if (currentStep.value === TAG_CATEGORIES.length) handleStart()
+  if (currentStep.value === filteredCategories.value.length) handleStart()
   else next()
 }
 </script>
