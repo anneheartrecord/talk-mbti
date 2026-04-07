@@ -18,13 +18,15 @@ talk-mbti takes a different approach: it just talks to you. About anything — w
 
 **👉 Try it: https://mbti.charles-cheng.com**
 
-<p align="center">
-  <img src="mbti-images/home-page.png" width="180" />
-  <img src="mbti-images/chat.png" width="180" />
-  <img src="mbti-images/chat2.png" width="180" />
-  <img src="mbti-images/report_1.png" width="180" />
-  <img src="mbti-images/report_2.png" width="180" />
-</p>
+<table>
+  <tr>
+    <td><img src="mbti-images/home-page.png" width="180" /></td>
+    <td><img src="mbti-images/chat.png" width="180" /></td>
+    <td><img src="mbti-images/chat2.png" width="180" /></td>
+    <td><img src="mbti-images/report_1.png" width="180" /></td>
+    <td><img src="mbti-images/report_2.png" width="180" /></td>
+  </tr>
+</table>
 
 ## License
 
