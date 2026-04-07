@@ -1,41 +1,47 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-[#6C5CE7] via-[#a29bfe] to-[#dfe6e9] flex flex-col items-center justify-center px-8 relative overflow-hidden">
+  <div class="min-h-screen bg-gradient-to-br from-[#6C5CE7] via-[#a29bfe] to-[#dfe6e9] flex flex-col items-center justify-center relative overflow-hidden" style="padding: 40px;">
     <div class="absolute top-20 left-10 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float" />
     <div class="absolute bottom-20 right-10 w-80 h-80 bg-purple-300/20 rounded-full blur-3xl animate-float-delay" />
 
     <div class="relative z-10 text-center max-w-lg">
-      <div class="mb-14 text-8xl animate-bounce-gentle">🔮</div>
+      <!-- 图标 -->
+      <div class="animate-bounce-gentle" style="font-size: 80px; margin-bottom: 50px;">🔮</div>
 
-      <h1 class="text-6xl font-extrabold text-white mb-12 tracking-tight">读心术</h1>
+      <!-- 标题 -->
+      <h1 class="font-extrabold text-white tracking-tight" style="font-size: 56px; margin-bottom: 24px;">读心术</h1>
 
-      <p class="text-xl text-white/80 mb-20 leading-relaxed px-4">
+      <!-- 副标题 -->
+      <p class="text-white/80 leading-relaxed" style="font-size: 20px; margin-bottom: 60px; padding: 0 16px;">
         不做问卷，只聊天——<br class="sm:hidden" />AI 通过对话分析你的 MBTI 人格
       </p>
 
-      <div class="grid grid-cols-3 gap-10 mb-20">
-        <div class="flex flex-col items-center gap-4 animate-fade-in-up-1">
-          <div class="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-4xl">💬</div>
-          <span class="text-white/90 text-lg font-medium">自然对话</span>
+      <!-- 三个特点 -->
+      <div class="grid grid-cols-3" style="gap: 40px; margin-bottom: 60px;">
+        <div class="flex flex-col items-center animate-fade-in-up-1" style="gap: 16px;">
+          <div class="rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center" style="width: 80px; height: 80px; font-size: 36px;">💬</div>
+          <span class="text-white/90 font-medium" style="font-size: 18px;">自然对话</span>
         </div>
-        <div class="flex flex-col items-center gap-4 animate-fade-in-up-2">
-          <div class="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-4xl">🤖</div>
-          <span class="text-white/90 text-lg font-medium">AI 分析</span>
+        <div class="flex flex-col items-center animate-fade-in-up-2" style="gap: 16px;">
+          <div class="rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center" style="width: 80px; height: 80px; font-size: 36px;">🤖</div>
+          <span class="text-white/90 font-medium" style="font-size: 18px;">AI 分析</span>
         </div>
-        <div class="flex flex-col items-center gap-4 animate-fade-in-up-3">
-          <div class="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-4xl">📊</div>
-          <span class="text-white/90 text-lg font-medium">即时报告</span>
+        <div class="flex flex-col items-center animate-fade-in-up-3" style="gap: 16px;">
+          <div class="rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center" style="width: 80px; height: 80px; font-size: 36px;">📊</div>
+          <span class="text-white/90 font-medium" style="font-size: 18px;">即时报告</span>
         </div>
       </div>
 
+      <!-- CTA 按钮 -->
       <button
         @click="$router.push('/tags')"
-        class="px-24 py-7 bg-white text-[#6C5CE7] font-bold text-2xl rounded-full shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer animate-pulse-soft"
+        class="bg-white text-[#6C5CE7] font-bold rounded-full shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer animate-pulse-soft"
+        style="padding: 24px 80px; font-size: 24px;"
       >
         开始聊天 →
       </button>
     </div>
 
-    <p class="absolute bottom-10 text-white/50 text-sm tracking-wide">
+    <p class="absolute text-white/50 tracking-wide" style="bottom: 40px; font-size: 14px;">
       Powered by Gemini · 约 5 分钟 · 完全免费
     </p>
   </div>
@@ -65,7 +71,6 @@
   0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
   50% { box-shadow: 0 0 0 16px rgba(255,255,255,0); }
 }
-
 .animate-float { animation: float 6s ease-in-out infinite; }
 .animate-float-delay { animation: float-delay 8s ease-in-out infinite; }
 .animate-fade-in-up-1 { animation: fade-in-up 0.8s ease-out 0.2s both; }

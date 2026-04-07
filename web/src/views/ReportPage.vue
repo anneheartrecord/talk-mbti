@@ -12,15 +12,15 @@
 
       <div v-else>
         <!-- 顶部：MBTI 类型大卡 -->
-        <div class="bg-white rounded-2xl shadow-lg p-14 text-center mb-10 mt-4">
-          <div class="text-8xl font-black tracking-widest mb-6">
+        <div class="bg-white rounded-2xl shadow-lg text-center" style="padding: 48px 40px; margin-bottom: 32px; margin-top: 16px;">
+          <div class="font-black tracking-widest" style="font-size: 72px; margin-bottom: 20px;">
             <span :class="letterColor(0)">{{ report.type?.[0] }}</span>
             <span :class="letterColor(1)">{{ report.type?.[1] }}</span>
             <span :class="letterColor(2)">{{ report.type?.[2] }}</span>
             <span :class="letterColor(3)">{{ report.type?.[3] }}</span>
           </div>
-          <p class="text-xl text-gray-500 mt-2">{{ report.headline }}</p>
-          <div class="w-12 h-1 bg-purple-400 mx-auto mt-8 rounded-full"></div>
+          <p class="text-gray-500" style="font-size: 20px; margin-top: 8px;">{{ report.headline }}</p>
+          <div class="bg-purple-400 mx-auto rounded-full" style="width: 48px; height: 4px; margin-top: 28px;"></div>
         </div>
 
         <!-- 四维度 -->
@@ -106,22 +106,25 @@
         </ReportCard>
 
         <!-- 操作按钮 -->
-        <div class="flex flex-col gap-6 mt-12 mb-10">
+        <div class="flex flex-col" style="gap: 20px; margin-top: 40px; margin-bottom: 36px;">
           <button
             @click="shareResult"
-            class="w-full py-5 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 active:scale-[0.98] transition-all text-lg"
+            class="w-full bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 active:scale-[0.98] transition-all"
+            style="padding: 20px 0; font-size: 18px;"
           >
             {{ shareText }}
           </button>
           <button
             @click="retest"
-            class="w-full py-5 bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:border-gray-400 transition-colors text-lg"
+            class="w-full bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:border-gray-400 transition-colors"
+            style="padding: 20px 0; font-size: 18px;"
           >
             重新测试
           </button>
           <button
             @click="showHistory = !showHistory"
-            class="w-full py-4 text-base text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+            class="w-full text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+            style="padding: 16px 0; font-size: 16px;"
           >
             {{ showHistory ? '收起对话记录 ↑' : '查看对话记录 ↓' }}
           </button>

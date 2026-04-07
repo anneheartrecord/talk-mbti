@@ -1,19 +1,22 @@
 <template>
   <div
-    class="flex items-start gap-4 py-4"
+    class="flex items-start"
     :class="isUser ? 'flex-row-reverse' : ''"
+    style="gap: 16px; padding: 16px 0;"
   >
     <!-- 头像 -->
     <div
-      class="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg"
+      class="shrink-0 rounded-full flex items-center justify-center"
       :class="isUser ? 'bg-blue-100' : 'bg-purple-100'"
+      style="width: 44px; height: 44px; font-size: 20px;"
     >
       {{ isUser ? '🧑' : '🔮' }}
     </div>
 
     <!-- 消息气泡 -->
     <div
-      class="max-w-[78%] px-5 py-4 rounded-2xl text-base leading-relaxed whitespace-pre-wrap break-words"
+      class="rounded-2xl whitespace-pre-wrap break-words leading-relaxed"
+      style="max-width: 78%; padding: 16px 20px; font-size: 16px;"
       :class="isUser
         ? 'bg-blue-50 text-gray-800 rounded-tr-sm'
         : 'bg-gray-50 text-gray-800 rounded-tl-sm'"
@@ -21,7 +24,8 @@
       {{ message.content }}
       <span
         v-if="isStreaming && !isUser"
-        class="inline-block w-0.5 h-5 ml-0.5 bg-gray-400 align-middle animate-blink"
+        class="inline-block bg-gray-400 align-middle animate-blink"
+        style="width: 2px; height: 20px; margin-left: 2px;"
       />
     </div>
   </div>

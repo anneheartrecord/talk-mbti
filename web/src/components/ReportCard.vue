@@ -1,13 +1,14 @@
 <template>
   <div
     ref="cardRef"
-    class="bg-white rounded-2xl p-10 shadow-md mb-10 transition-all duration-500"
+    class="bg-white rounded-2xl shadow-md transition-all duration-500"
+    style="padding: 36px; margin-bottom: 32px;"
     :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
     :style="{ transitionDelay: delay + 'ms' }"
   >
-    <div class="flex items-center gap-3 mb-6">
-      <span class="text-2xl">{{ icon }}</span>
-      <h3 class="font-bold text-gray-800 text-xl">{{ title }}</h3>
+    <div class="flex items-center" style="gap: 12px; margin-bottom: 24px;">
+      <span style="font-size: 28px;">{{ icon }}</span>
+      <h3 class="font-bold text-gray-800" style="font-size: 22px;">{{ title }}</h3>
     </div>
     <slot />
   </div>
