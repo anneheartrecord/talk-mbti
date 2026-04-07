@@ -1,85 +1,92 @@
 <template>
-  <div class="min-h-screen bg-white flex flex-col">
-    <!-- 顶部跳过 -->
-    <div class="px-8 pt-6 flex justify-end">
-      <button
-        @click="skipAll"
-        class="text-sm text-gray-400 hover:text-purple-500 transition-colors cursor-pointer"
-      >
-        → 跳过全部，直接开聊
-      </button>
-    </div>
+  <!-- 全屏背景 + 居中容器 -->
+  <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <!-- 主容器卡片 -->
+    <div class="w-full max-w-xl min-h-[90vh] bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden">
+      <!-- 顶部跳过 -->
+      <div class="px-8 pt-6 pb-2 flex justify-end shrink-0">
+        <button
+          @click="skipAll"
+          class="text-sm text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+        >
+          跳过全部 →
+        </button>
+      </div>
 
-    <!-- 主内容区 -->
-    <div class="flex-1 flex flex-col justify-center px-8 pb-4 max-w-2xl mx-auto w-full">
-      <transition name="slide" mode="out-in">
-        <!-- 标签分类步骤 -->
-        <div v-if="currentStep < TAG_CATEGORIES.length" :key="currentStep" class="w-full">
-          <div class="text-5xl mb-4">{{ currentCategory.icon }}</div>
-          <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ currentCategory.label }}
-            <span class="text-lg font-normal text-gray-400 ml-2">
-              （{{ currentCategory.type === 'multi' ? '多选' : '单选' }}）
-            </span>
-          </h2>
-          <p class="text-gray-400 text-base mb-10">
-            {{ currentCategory.type === 'multi' ? `最多选 ${currentCategory.maxSelect} 个` : '选一个最像你的' }}
-          </p>
+      <!-- 主内容区：垂直水平居中 -->
+      <div class="flex-1 flex flex-col items-center justify-center px-8">
+        <transition name="slide" mode="out-in">
+          <!-- 标签分类步骤 -->
+          <div v-if="currentStep < TAG_CATEGORIES.length" :key="currentStep" class="w-full max-w-md">
+            <div class="text-center mb-8">
+              <div class="text-5xl mb-4">{{ currentCategory.icon }}</div>
+              <h2 class="text-2xl font-bold text-gray-900 mb-2">
+                {{ currentCategory.label }}
+                <span class="text-base font-normal text-gray-400">
+                  （{{ currentCategory.type === 'multi' ? '多选' : '单选' }}）
+                </span>
+              </h2>
+              <p class="text-gray-400 text-sm mt-2 mb-2">
+                {{ currentCategory.type === 'multi' ? `最多选 ${currentCategory.maxSelect} 个` : '选一个最像你的' }}
+              </p>
+            </div>
 
-          <!-- 标签按钮：大按钮、网格布局 -->
-          <div
-            class="grid gap-4 mb-8"
-            :class="currentCategory.options.length <= 4 ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3'"
-          >
-            <button
-              v-for="option in currentCategory.options"
-              :key="option"
-              @click="toggleOption(option)"
-              class="px-6 py-4 rounded-xl text-lg font-medium border-2 transition-all duration-200 cursor-pointer select-none text-left"
-              :class="isSelected(option)
-                ? 'bg-gray-900 text-white border-gray-900'
-                : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'"
+            <!-- 标签按钮：grid 布局，充分间距 -->
+            <div
+              class="grid gap-4"
+              :class="currentCategory.options.length <= 4 ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3'"
             >
-              {{ option }}
-            </button>
+              <button
+                v-for="option in currentCategory.options"
+                :key="option"
+                @click="toggleOption(option)"
+                class="px-5 py-4 rounded-xl text-base font-medium border-2 transition-all duration-150 cursor-pointer select-none"
+                :class="isSelected(option)
+                  ? 'bg-gray-900 text-white border-gray-900 shadow-md'
+                  : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'"
+              >
+                {{ option }}
+              </button>
+            </div>
           </div>
-        </div>
 
-        <!-- 自定义标签步骤 -->
-        <div v-else-if="currentStep === TAG_CATEGORIES.length" :key="'custom'" class="w-full">
-          <div class="text-5xl mb-4">✏️</div>
-          <h2 class="text-3xl font-bold text-gray-900 mb-2">还有什么想说的？</h2>
-          <p class="text-gray-400 text-base mb-10">随便补充一句，让 AI 更了解你（可跳过）</p>
+          <!-- 自定义标签步骤 -->
+          <div v-else-if="currentStep === TAG_CATEGORIES.length" :key="'custom'" class="w-full max-w-md text-center">
+            <div class="text-5xl mb-4">✏️</div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">还有什么想说的？</h2>
+            <p class="text-gray-400 text-sm mb-8">随便补充一句，让 AI 更了解你（可跳过）</p>
 
-          <input
-            v-model="customTag"
-            type="text"
-            placeholder="比如「猫奴」「社恐晚期」「咖啡续命」"
-            class="w-full px-6 py-5 rounded-xl border-2 border-gray-200 text-lg text-gray-700 placeholder-gray-300 focus:outline-none focus:border-gray-900 transition-colors"
-            @keyup.enter="handleStart"
-          />
-        </div>
-      </transition>
-    </div>
+            <input
+              v-model="customTag"
+              type="text"
+              placeholder="比如「猫奴」「社恐晚期」「咖啡续命」"
+              class="w-full px-5 py-4 rounded-xl border-2 border-gray-200 text-base text-gray-700 placeholder-gray-300 focus:outline-none focus:border-gray-900 transition-colors text-center"
+              @keyup.enter="handleStart"
+            />
+          </div>
+        </transition>
+      </div>
 
-    <!-- 底部导航栏：← 页码 → -->
-    <div class="px-8 py-6 flex items-center justify-between border-t border-gray-100 max-w-2xl mx-auto w-full">
-      <button
-        @click="prev"
-        :class="currentStep > 0 ? 'text-gray-600 hover:text-gray-900 cursor-pointer' : 'text-gray-200 cursor-default'"
-        class="text-xl transition-colors w-20 text-left"
-        :disabled="currentStep === 0"
-      >
-        ←
-      </button>
+      <!-- 底部导航栏 -->
+      <div class="px-8 py-5 flex items-center justify-between border-t border-gray-100 shrink-0">
+        <button
+          @click="prev"
+          :disabled="currentStep === 0"
+          class="text-lg transition-colors w-16 text-left"
+          :class="currentStep > 0 ? 'text-gray-500 hover:text-gray-900 cursor-pointer' : 'text-gray-200 cursor-default'"
+        >
+          ←
+        </button>
 
-      <span class="text-gray-400 text-base tabular-nums">{{ currentStep + 1 }} / {{ allSteps.length }}</span>
+        <span class="text-gray-400 text-sm tabular-nums">{{ currentStep + 1 }} / {{ allSteps.length }}</span>
 
-      <button
-        @click="nextOrStart"
-        class="text-xl w-20 text-right transition-colors cursor-pointer text-gray-600 hover:text-gray-900"
-      >
-        {{ currentStep === TAG_CATEGORIES.length ? '开始 →' : '→' }}
-      </button>
+        <button
+          @click="nextOrStart"
+          class="text-lg w-16 text-right text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
+        >
+          {{ currentStep === TAG_CATEGORIES.length ? '开始 →' : '→' }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -130,15 +137,11 @@ function toggleOption(option) {
 }
 
 function next() {
-  if (currentStep.value < TAG_CATEGORIES.length) {
-    currentStep.value++
-  }
+  if (currentStep.value < TAG_CATEGORIES.length) currentStep.value++
 }
 
 function prev() {
-  if (currentStep.value > 0) {
-    currentStep.value--
-  }
+  if (currentStep.value > 0) currentStep.value--
 }
 
 function skipAll() {
@@ -156,19 +159,14 @@ function handleStart() {
       result[cat.id] = val
     }
   })
-  if (customTag.value.trim()) {
-    result.custom = customTag.value.trim()
-  }
+  if (customTag.value.trim()) result.custom = customTag.value.trim()
   sessionStorage.setItem('mbti_tags', JSON.stringify(result))
   router.push('/chat')
 }
 
 function nextOrStart() {
-  if (currentStep.value === TAG_CATEGORIES.length) {
-    handleStart()
-  } else {
-    next()
-  }
+  if (currentStep.value === TAG_CATEGORIES.length) handleStart()
+  else next()
 }
 </script>
 
@@ -176,12 +174,6 @@ function nextOrStart() {
 .slide-enter-active, .slide-leave-active {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.slide-enter-from {
-  opacity: 0;
-  transform: translateX(30px);
-}
-.slide-leave-to {
-  opacity: 0;
-  transform: translateX(-30px);
-}
+.slide-enter-from { opacity: 0; transform: translateX(30px); }
+.slide-leave-to { opacity: 0; transform: translateX(-30px); }
 </style>
