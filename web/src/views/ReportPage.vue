@@ -12,15 +12,15 @@
 
       <div v-else>
         <!-- 顶部：MBTI 类型大卡 -->
-        <div class="bg-white rounded-2xl shadow-lg p-12 text-center mb-8 mt-4">
-          <div class="text-7xl font-black tracking-widest mb-5">
+        <div class="bg-white rounded-2xl shadow-lg p-14 text-center mb-10 mt-4">
+          <div class="text-8xl font-black tracking-widest mb-6">
             <span :class="letterColor(0)">{{ report.type?.[0] }}</span>
             <span :class="letterColor(1)">{{ report.type?.[1] }}</span>
             <span :class="letterColor(2)">{{ report.type?.[2] }}</span>
             <span :class="letterColor(3)">{{ report.type?.[3] }}</span>
           </div>
-          <p class="text-xl text-gray-500">{{ report.headline }}</p>
-          <div class="w-12 h-1 bg-purple-400 mx-auto mt-6 rounded-full"></div>
+          <p class="text-xl text-gray-500 mt-2">{{ report.headline }}</p>
+          <div class="w-12 h-1 bg-purple-400 mx-auto mt-8 rounded-full"></div>
         </div>
 
         <!-- 四维度 -->
@@ -106,22 +106,22 @@
         </ReportCard>
 
         <!-- 操作按钮 -->
-        <div class="flex flex-col gap-5 mt-10 mb-8">
+        <div class="flex flex-col gap-6 mt-12 mb-10">
           <button
             @click="shareResult"
-            class="w-full py-4.5 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 active:scale-[0.98] transition-all text-lg"
+            class="w-full py-5 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 active:scale-[0.98] transition-all text-lg"
           >
             {{ shareText }}
           </button>
           <button
             @click="retest"
-            class="w-full py-4.5 bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:border-gray-400 transition-colors text-lg"
+            class="w-full py-5 bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:border-gray-400 transition-colors text-lg"
           >
             重新测试
           </button>
           <button
             @click="showHistory = !showHistory"
-            class="w-full py-3 text-base text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+            class="w-full py-4 text-base text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
           >
             {{ showHistory ? '收起对话记录 ↑' : '查看对话记录 ↓' }}
           </button>

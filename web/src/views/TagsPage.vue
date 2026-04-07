@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-    <div class="w-full max-w-xl min-h-[90vh] bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden relative">
+    <div class="w-full max-w-xl min-h-[90vh] bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden">
       <!-- 顶部跳过 -->
       <div class="px-8 pt-7 pb-3 flex justify-end shrink-0">
         <button
@@ -11,32 +11,14 @@
         </button>
       </div>
 
-      <!-- 左箭头 -->
-      <button
-        @click="prev"
-        :disabled="currentStep === 0"
-        class="absolute left-3 top-1/2 -translate-y-1/2 w-14 h-14 flex items-center justify-center text-4xl transition-all z-10"
-        :class="currentStep > 0 ? 'text-gray-300 hover:text-gray-700 cursor-pointer' : 'text-transparent cursor-default'"
-      >
-        ‹
-      </button>
-
-      <!-- 右箭头 -->
-      <button
-        @click="nextOrStart"
-        class="absolute right-3 top-1/2 -translate-y-1/2 w-14 h-14 flex items-center justify-center text-4xl text-gray-300 hover:text-gray-700 transition-all cursor-pointer z-10"
-      >
-        ›
-      </button>
-
       <!-- 主内容区 -->
       <div class="flex-1 flex flex-col items-center justify-center px-16">
         <transition name="slide" mode="out-in">
           <!-- 标签分类步骤 -->
           <div v-if="currentStep < TAG_CATEGORIES.length" :key="currentStep" class="w-full">
-            <div class="text-center mb-12">
-              <div class="text-7xl mb-6">{{ currentCategory.icon }}</div>
-              <h2 class="text-2xl font-bold text-gray-900 mb-4">
+            <div class="text-center mb-14">
+              <div class="text-7xl mb-8">{{ currentCategory.icon }}</div>
+              <h2 class="text-2xl font-bold text-gray-900 mb-6">
                 {{ currentCategory.label }}
                 <span class="text-sm font-normal text-gray-400 ml-2">
                   （{{ currentCategory.type === 'multi' ? '多选' : '单选' }}）
@@ -49,7 +31,7 @@
 
             <!-- 标签按钮 -->
             <div
-              class="grid gap-5 mb-12"
+              class="grid gap-5 mb-14"
               :class="currentCategory.options.length <= 4 ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3'"
             >
               <button
@@ -64,45 +46,37 @@
                 {{ option }}
               </button>
             </div>
-
-            <!-- 居中下一步按钮 -->
-            <div class="text-center">
-              <button
-                @click="nextOrStart"
-                class="px-14 py-4 bg-gray-900 text-white text-lg font-medium rounded-full hover:bg-gray-800 active:scale-95 transition-all cursor-pointer shadow-md"
-              >
-                {{ hasSelection ? '下一步' : '跳过此项' }}
-              </button>
-            </div>
           </div>
 
           <!-- 自定义标签步骤 -->
           <div v-else-if="currentStep === TAG_CATEGORIES.length" :key="'custom'" class="w-full text-center">
-            <div class="text-7xl mb-6">✏️</div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">还有什么想说的？</h2>
-            <p class="text-gray-400 text-base mb-12">随便补充一句，让 AI 更了解你（可跳过）</p>
+            <div class="text-7xl mb-8">✏️</div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">还有什么想说的？</h2>
+            <p class="text-gray-400 text-base mb-14">随便补充一句，让 AI 更了解你（可跳过）</p>
 
             <input
               v-model="customTag"
               type="text"
               placeholder="比如「猫奴」「社恐晚期」「咖啡续命」"
-              class="w-full px-6 py-5 rounded-xl border-2 border-gray-200 text-lg text-gray-700 placeholder-gray-300 focus:outline-none focus:border-gray-900 transition-colors text-center mb-12"
+              class="w-full px-6 py-5 rounded-xl border-2 border-gray-200 text-lg text-gray-700 placeholder-gray-300 focus:outline-none focus:border-gray-900 transition-colors text-center mb-14"
               @keyup.enter="handleStart"
             />
-
-            <button
-              @click="handleStart"
-              class="px-16 py-4.5 bg-gray-900 text-white text-xl font-medium rounded-full hover:bg-gray-800 active:scale-95 transition-all cursor-pointer shadow-md"
-            >
-              开始对话 🔮
-            </button>
           </div>
         </transition>
       </div>
 
       <!-- 底部进度 -->
-      <div class="px-8 py-5 flex items-center justify-center gap-3 border-t border-gray-100 shrink-0">
-        <div class="flex items-center gap-3 w-full max-w-xs">
+      <div class="px-8 py-5 flex items-center justify-between border-t border-gray-100 shrink-0">
+        <button
+          @click="prev"
+          :disabled="currentStep === 0"
+          class="px-5 py-3 bg-white text-gray-600 rounded-full hover:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed transition-colors"
+          :class="currentStep > 0 ? 'cursor-pointer' : 'cursor-default'"
+        >
+          ‹ 上一步
+        </button>
+
+        <div class="flex items-center gap-3">
           <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
             <div
               class="h-full bg-gray-800 rounded-full transition-all duration-500"
@@ -111,6 +85,13 @@
           </div>
           <span class="text-xs text-gray-400 tabular-nums shrink-0">{{ currentStep + 1 }}/{{ allSteps.length }}</span>
         </div>
+
+        <button
+          @click="nextOrStart"
+          class="px-5 py-3 bg-gray-900 text-white rounded-full hover:bg-gray-800 active:scale-95 transition-all cursor-pointer shadow-md"
+        >
+          {{ currentStep < TAG_CATEGORIES.length ? (hasSelection ? '下一步' : '跳过此项') : '开始对话 🔮' }}
+        </button>
       </div>
     </div>
   </div>

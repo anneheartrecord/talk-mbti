@@ -66,7 +66,7 @@
             @keydown="handleKeydown"
             rows="3"
             :placeholder="loading ? '对方正在输入...' : '输入你的回复...'"
-            class="flex-1 resize-none rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-base leading-relaxed max-h-40 overflow-y-auto focus:outline-none focus:border-purple-300 focus:bg-white focus:ring-2 focus:ring-purple-50 disabled:opacity-40 transition-all"
+            class="flex-1 resize-none rounded-2xl border border-gray-200 bg-gray-50 px-6 py-5 text-base leading-relaxed max-h-40 overflow-y-auto focus:outline-none focus:border-purple-300 focus:bg-white focus:ring-2 focus:ring-purple-50 disabled:opacity-40 transition-all"
           />
           <button
             @click="handleSend"
