@@ -111,10 +111,11 @@
 
 <script setup>
 import { reactive, ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { TAG_CATEGORIES } from '../constants/tags'
 
 const router = useRouter()
+const route = useRoute()
 const currentStep = ref(0)
 const customTag = ref('')
 
@@ -159,6 +160,8 @@ function prev() { if (currentStep.value > 0) currentStep.value-- }
 
 function skipAll() {
   sessionStorage.setItem('mbti_tags', JSON.stringify({}))
+  const mode = route.query.mode || 'standard'
+  sessionStorage.setItem('mbti_mode', mode)
   router.push('/chat')
 }
 
@@ -171,6 +174,8 @@ function handleStart() {
   })
   if (customTag.value.trim()) result.custom = customTag.value.trim()
   sessionStorage.setItem('mbti_tags', JSON.stringify(result))
+  const mode = route.query.mode || 'standard'
+  sessionStorage.setItem('mbti_mode', mode)
   router.push('/chat')
 }
 

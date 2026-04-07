@@ -96,6 +96,7 @@ const router = useRouter()
 const inputText = ref('')
 const inputRef = ref(null)
 const messageContainer = ref(null)
+const chatMode = ref('standard') // standard | student | mystical
 
 const {
   messages, currentRound, maxRounds, progress,
@@ -121,7 +122,12 @@ watch(isFinished, (val) => {
       sessionStorage.setItem('mbti_report', JSON.stringify(report.value))
       sessionStorage.setItem('mbti_messages', JSON.stringify(messages.value))
       unwatch()
-      router.push('/report')
+      // 根据模式跳转不同报告页
+      const reportRoutes = {
+        student: '/student-report',
+        mystical: '/mystical-report',
+      }
+      router.push(reportRoutes[chatMode.value] || '/report')
     }
   }, { immediate: true })
 })
@@ -147,7 +153,8 @@ onMounted(async () => {
   const tagsStr = sessionStorage.getItem('mbti_tags')
   if (!tagsStr) { router.replace('/tags'); return }
   const tags = JSON.parse(tagsStr)
-  initChat(tags)
+  chatMode.value = sessionStorage.getItem('mbti_mode') || 'standard'
+  initChat(tags, 30, chatMode.value)
   await getGreeting(onChunk)
 })
 </script>

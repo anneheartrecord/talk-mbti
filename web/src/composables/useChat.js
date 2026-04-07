@@ -1,6 +1,8 @@
 import { ref, computed } from 'vue'
 import { useGemini } from './useGemini'
 import { buildChatSystemPrompt, buildReportPrompt } from '../prompts/system'
+import { buildStudentChatPrompt, buildStudentReportPrompt } from '../prompts/student'
+import { buildMysticalChatPrompt, buildMysticalReportPrompt } from '../prompts/mystical'
 import { END_KEYWORDS } from '../constants/tags'
 import { saveResult, saveDraft, loadDraft } from '../lib/supabase'
 
@@ -17,11 +19,12 @@ export function useChat() {
   const canSkip = computed(() => currentRound.value >= 10)
   const sessionId = ref(null) // 会话 ID，用于草稿保存
   const hasDraft = ref(false) // 是否有未完成的草稿
+  const chatMode = ref('standard') // standard | student | mystical
   const gemini = useGemini()
 
   const progress = computed(() => Math.min((currentRound.value / maxRounds.value) * 100, 100))
 
-  function initChat(tags, rounds = 30) {
+  function initChat(tags, rounds = 30, mode = 'standard') {
     userTags.value = tags
     messages.value = []
     currentRound.value = 0
@@ -29,8 +32,18 @@ export function useChat() {
     isFinished.value = false
     report.value = null
     sessionId.value = crypto.randomUUID()
+    chatMode.value = mode
 
-    const systemPrompt = buildChatSystemPrompt(tags, rounds)
+    let systemPrompt
+    if (mode === 'student') {
+      systemPrompt = buildStudentChatPrompt(tags, rounds)
+    } else if (mode === 'mystical') {
+      const birthInfo = JSON.parse(sessionStorage.getItem('mbti_birth_info') || '{}')
+      systemPrompt = buildMysticalChatPrompt(tags, birthInfo, rounds)
+    } else {
+      systemPrompt = buildChatSystemPrompt(tags, rounds)
+    }
+
     gemini.init(systemPrompt)
   }
 
@@ -111,7 +124,16 @@ export function useChat() {
     isGeneratingReport.value = true
 
     try {
-      const prompt = buildReportPrompt(userTags.value, messages.value)
+      let prompt
+      if (chatMode.value === 'student') {
+        prompt = buildStudentReportPrompt(userTags.value, messages.value)
+      } else if (chatMode.value === 'mystical') {
+        const birthInfo = JSON.parse(sessionStorage.getItem('mbti_birth_info') || '{}')
+        prompt = buildMysticalReportPrompt(userTags.value, messages.value, birthInfo)
+      } else {
+        prompt = buildReportPrompt(userTags.value, messages.value)
+      }
+
       const rawText = await gemini.generateStream(prompt)
 
       const jsonMatch = rawText.match(/```json\s*([\s\S]*?)\s*```/) || rawText.match(/\{[\s\S]*\}/)
@@ -124,8 +146,16 @@ export function useChat() {
     } catch (e) {
       console.error('报告生成失败:', e)
       try {
-        const prompt = buildReportPrompt(userTags.value, messages.value)
-        const rawText = await gemini.generateStream(prompt)
+        let retryPrompt
+        if (chatMode.value === 'student') {
+          retryPrompt = buildStudentReportPrompt(userTags.value, messages.value)
+        } else if (chatMode.value === 'mystical') {
+          const birthInfo = JSON.parse(sessionStorage.getItem('mbti_birth_info') || '{}')
+          retryPrompt = buildMysticalReportPrompt(userTags.value, messages.value, birthInfo)
+        } else {
+          retryPrompt = buildReportPrompt(userTags.value, messages.value)
+        }
+        const rawText = await gemini.generateStream(retryPrompt)
         const jsonMatch = rawText.match(/```json\s*([\s\S]*?)\s*```/) || rawText.match(/\{[\s\S]*\}/)
         if (jsonMatch) {
           const jsonStr = jsonMatch[1] || jsonMatch[0]

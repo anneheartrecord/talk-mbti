@@ -3,6 +3,15 @@
     <div class="absolute top-20 left-10 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float" />
     <div class="absolute bottom-20 right-10 w-80 h-80 bg-purple-300/20 rounded-full blur-3xl animate-float-delay" />
 
+    <!-- 右上角个人中心 -->
+    <button
+      @click="$router.push('/profile')"
+      class="absolute z-20 bg-white/20 backdrop-blur rounded-full flex items-center justify-center hover:bg-white/30 transition-all cursor-pointer"
+      style="top: 24px; right: 24px; width: 48px; height: 48px; font-size: 22px;"
+    >
+      {{ isLoggedIn ? '👤' : '🧑' }}
+    </button>
+
     <div class="relative z-10 text-center max-w-lg">
       <!-- 图标 -->
       <div class="animate-bounce-gentle" style="font-size: 80px; margin-bottom: 50px;">🔮</div>
@@ -33,7 +42,7 @@
 
       <!-- CTA 按钮 -->
       <button
-        @click="$router.push('/tags')"
+        @click="$router.push('/mode')"
         class="bg-white text-[#6C5CE7] font-bold rounded-full shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer animate-pulse-soft"
         style="padding: 24px 80px; font-size: 24px;"
       >
@@ -48,6 +57,8 @@
 </template>
 
 <script setup>
+import { useAuthGlobal } from '../composables/useAuth'
+const { isLoggedIn } = useAuthGlobal()
 </script>
 
 <style>
