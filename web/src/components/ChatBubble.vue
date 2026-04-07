@@ -1,22 +1,22 @@
 <template>
   <div
-    class="flex items-start gap-4 py-3"
+    class="flex items-start gap-3 py-4"
     :class="isUser ? 'flex-row-reverse' : ''"
   >
-    <!-- AI 头像 -->
+    <!-- 头像 -->
     <div
-      v-if="!isUser"
-      class="flex-shrink-0 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-lg"
+      class="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg"
+      :class="isUser ? 'bg-blue-100' : 'bg-purple-100'"
     >
-      🔮
+      {{ isUser ? '🧑' : '🔮' }}
     </div>
 
-    <!-- 消息内容 -->
+    <!-- 消息气泡 -->
     <div
-      class="max-w-[85%] text-base leading-relaxed whitespace-pre-wrap break-words"
+      class="max-w-[78%] px-4 py-3.5 rounded-2xl text-base leading-relaxed whitespace-pre-wrap break-words"
       :class="isUser
-        ? 'bg-gray-50 rounded-2xl rounded-tr-sm px-5 py-3.5 text-gray-800'
-        : 'text-gray-800 pt-1'"
+        ? 'bg-blue-50 text-gray-800 rounded-tr-sm'
+        : 'bg-gray-50 text-gray-800 rounded-tl-sm'"
     >
       {{ message.content }}
       <span

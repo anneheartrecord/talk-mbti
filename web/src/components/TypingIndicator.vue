@@ -1,12 +1,10 @@
 <template>
-  <div class="flex items-start gap-4 py-3">
+  <div class="flex items-start gap-3 py-3">
     <!-- AI 头像 -->
-    <div class="flex-shrink-0 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-lg">
+    <div class="shrink-0 w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-lg">
       🔮
     </div>
-
-    <!-- 打字指示器 -->
-    <div class="flex items-center gap-1.5 pt-2.5">
+    <div class="flex items-center gap-1.5 pt-3">
       <span class="w-2 h-2 bg-gray-300 rounded-full animate-typing-dot-1" />
       <span class="w-2 h-2 bg-gray-300 rounded-full animate-typing-dot-2" />
       <span class="w-2 h-2 bg-gray-300 rounded-full animate-typing-dot-3" />
