@@ -51,7 +51,7 @@
     </div>
 
     <p class="absolute text-white/50 tracking-wide" style="bottom: 40px; font-size: 14px;">
-      Powered by Gemini · 约 5 分钟 · 完全免费
+      Powered by Gemini
     </p>
   </div>
 </template>

@@ -70,13 +70,13 @@
       </div>
 
       <!-- 底部导航栏 -->
-      <div class="flex items-center justify-between border-t border-gray-100 shrink-0" style="padding: 20px 32px;">
+      <div class="flex items-center justify-between border-t border-gray-100 shrink-0" style="padding: clamp(12px, 3vw, 20px) clamp(16px, 4vw, 32px);">
         <!-- 上一步 -->
         <button
           @click="prev"
           :disabled="currentStep === 0"
-          class="rounded-full border-2 transition-all"
-          style="padding: 12px 24px; font-size: 15px;"
+          class="rounded-full border-2 transition-all shrink-0"
+          style="padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 24px); font-size: clamp(13px, 3.2vw, 15px);"
           :class="currentStep > 0
             ? 'border-gray-300 text-gray-600 hover:border-gray-500 cursor-pointer'
             : 'border-gray-100 text-gray-200 cursor-default'"
@@ -85,8 +85,8 @@
         </button>
 
         <!-- 进度 -->
-        <div class="flex items-center" style="gap: 12px;">
-          <div class="rounded-full overflow-hidden" style="width: 80px; height: 6px; background: #f0f0f0;">
+        <div class="flex items-center" style="gap: 8px;">
+          <div class="rounded-full overflow-hidden" style="width: clamp(48px, 12vw, 80px); height: 6px; background: #f0f0f0;">
             <div
               class="h-full rounded-full transition-all duration-500"
               style="background: #333;"
@@ -99,8 +99,8 @@
         <!-- 下一步 -->
         <button
           @click="nextOrStart"
-          class="rounded-full border-2 border-gray-800 bg-gray-800 text-white hover:bg-gray-700 active:scale-95 transition-all cursor-pointer"
-          style="padding: 12px 28px; font-size: 15px;"
+          class="rounded-full border-2 border-gray-800 bg-gray-800 text-white hover:bg-gray-700 active:scale-95 transition-all cursor-pointer shrink-0"
+          style="padding: clamp(8px, 2vw, 12px) clamp(16px, 4vw, 28px); font-size: clamp(13px, 3.2vw, 15px);"
         >
           {{ currentStep < filteredCategories.length ? (hasSelection ? '下一步 ›' : '跳过 ›') : '开始对话 🔮' }}
         </button>

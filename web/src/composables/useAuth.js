@@ -51,10 +51,12 @@ export function useAuth() {
           user.value = session.user
           await migrateGuestData(session.user.id)
         }
-        // 清除 URL 中的 token（保留 hash 路由）
-        const cleanHash = hash.split('&')[0]
-        if (cleanHash.startsWith('#access_token') || cleanHash.startsWith('#/')) {
-          // 如果整个 hash 都是 token 参数，跳转到首页
+        // 清除 URL 中的 token，跳转到之前要去的页面或首页
+        const redirect = sessionStorage.getItem('redirect_after_login')
+        if (redirect) {
+          sessionStorage.removeItem('redirect_after_login')
+          window.location.hash = '#' + redirect
+        } else {
           window.location.hash = '#/'
         }
         return
