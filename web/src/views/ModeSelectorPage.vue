@@ -30,7 +30,7 @@
           <div style="flex: 1;">
             <h2 style="font-size: 18px; font-weight: 700; color: #2d3436; margin: 0 0 4px;">MBTI 人格测试</h2>
             <p style="font-size: 13px; color: #636e72; margin: 0 0 8px; line-height: 1.4;">通过自然对话分析你的人格类型</p>
-            <span class="tag-free">免费 · 约5分钟</span>
+            <span class="tag-free">免费</span>
           </div>
           <span style="color: #b2bec3; font-size: 20px; align-self: center;">›</span>
         </div>
@@ -43,7 +43,7 @@
           <div style="flex: 1;">
             <h2 style="font-size: 18px; font-weight: 700; color: #2d3436; margin: 0 0 4px;">学生专业推荐</h2>
             <p style="font-size: 13px; color: #636e72; margin: 0 0 8px; line-height: 1.4;">分析人格类型 + 推荐匹配专业</p>
-            <span class="tag-free">免费 · 约8分钟</span>
+            <span class="tag-free">免费</span>
           </div>
           <span style="color: #b2bec3; font-size: 20px; align-self: center;">›</span>
         </div>
@@ -56,7 +56,6 @@
           <div style="flex: 1;">
             <h2 style="font-size: 18px; font-weight: 700; color: #2d3436; margin: 0 0 4px;">MBTI 答疑</h2>
             <p style="font-size: 13px; color: #636e72; margin: 0 0 8px; line-height: 1.4;">输入你的 MBTI 和问题，获取个性化建议</p>
-            <span class="tag-paid">即将收费 · 当前免费体验</span>
           </div>
           <span style="color: #b2bec3; font-size: 20px; align-self: center;">›</span>
         </div>
@@ -69,7 +68,6 @@
           <div style="flex: 1;">
             <h2 style="font-size: 18px; font-weight: 700; color: #2d3436; margin: 0 0 4px;">八字 × MBTI 命理</h2>
             <p style="font-size: 13px; color: #636e72; margin: 0 0 8px; line-height: 1.4;">结合出生八字和人格分析的综合报告</p>
-            <span class="tag-free">免费体验 · 约10分钟</span>
           </div>
           <span style="color: #b2bec3; font-size: 20px; align-self: center;">›</span>
         </div>

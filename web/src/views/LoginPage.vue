@@ -132,15 +132,15 @@
             title="Google 登录"
           >📧</button>
           <button
-            @click="handleOAuthLogin('wechat')"
-            class="flex items-center justify-center rounded-xl bg-white/20 backdrop-blur hover:bg-white/30 transition-all cursor-pointer"
-            style="width: 56px; height: 56px; font-size: 24px;"
+            disabled
+            class="flex items-center justify-center rounded-xl bg-white/10 transition-all"
+            style="width: 56px; height: 56px; font-size: 24px; opacity: 0.4; cursor: not-allowed;"
             title="微信登录（即将支持）"
           >💬</button>
           <button
-            @click="handleOAuthLogin('qq')"
-            class="flex items-center justify-center rounded-xl bg-white/20 backdrop-blur hover:bg-white/30 transition-all cursor-pointer"
-            style="width: 56px; height: 56px; font-size: 24px;"
+            disabled
+            class="flex items-center justify-center rounded-xl bg-white/10 transition-all"
+            style="width: 56px; height: 56px; font-size: 24px; opacity: 0.4; cursor: not-allowed;"
             title="QQ 登录（即将支持）"
           >🐧</button>
         </div>
