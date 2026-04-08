@@ -121,39 +121,15 @@
         </form>
       </div>
 
-      <!-- 社交登录 -->
+      <!-- Google 一键登录 -->
       <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.15);">
-        <p style="font-size: 13px; color: rgba(255,255,255,0.5); text-align: center; margin-bottom: 16px;">或使用第三方登录</p>
-        <div style="display: flex; justify-content: center; gap: 16px;">
-          <button
-            @click="handleOAuthLogin('google')"
-            class="flex items-center justify-center rounded-xl bg-white/20 backdrop-blur hover:bg-white/30 transition-all cursor-pointer"
-            style="width: 56px; height: 56px; font-size: 24px;"
-            title="Google 登录"
-          >📧</button>
-          <button
-            disabled
-            class="flex items-center justify-center rounded-xl bg-white/10 transition-all"
-            style="width: 56px; height: 56px; font-size: 24px; opacity: 0.4; cursor: not-allowed;"
-            title="微信登录（即将支持）"
-          >💬</button>
-          <button
-            disabled
-            class="flex items-center justify-center rounded-xl bg-white/10 transition-all"
-            style="width: 56px; height: 56px; font-size: 24px; opacity: 0.4; cursor: not-allowed;"
-            title="QQ 登录（即将支持）"
-          >🐧</button>
-        </div>
-      </div>
-
-      <!-- 访客入口 -->
-      <div class="text-center" style="margin-top: 28px;">
         <button
-          @click="$router.push('/')"
-          class="text-white/80 hover:text-white underline underline-offset-4 transition-colors"
-          style="font-size: 15px;"
+          @click="handleOAuthLogin('google')"
+          class="w-full flex items-center justify-center rounded-xl bg-white text-gray-700 font-semibold hover:bg-gray-100 active:scale-[0.98] transition-all cursor-pointer"
+          style="padding: 16px 0; font-size: 16px; gap: 12px;"
         >
-          以访客身份继续 →
+          <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 33.2 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C33.9 5.9 29.2 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.2-2.7-.4-4z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.5 15.9 18.9 13 24 13c3 0 5.8 1.1 7.9 3l5.7-5.7C33.9 5.9 29.2 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5 0 9.5-1.8 13-4.7l-6-5.1C29.1 35.9 26.7 37 24 37c-5.2 0-9.6-3.5-11.1-8.2l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4 5.5l6 5.1c-.4.4 6.7-4.9 6.7-14.6 0-1.3-.2-2.7-.4-4z"/></svg>
+          使用 Google 账号登录
         </button>
       </div>
     </div>

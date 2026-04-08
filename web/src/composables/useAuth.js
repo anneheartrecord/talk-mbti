@@ -33,12 +33,33 @@ export function useAuth() {
   })
 
   /**
-   * 初始化：检查现有会话
+   * 初始化：检查现有会话，处理 OAuth 回调
    */
   async function init() {
     if (!supabase) return
 
     try {
+      // 处理 OAuth 回调（Google 登录后 URL hash 里带 access_token）
+      const hash = window.location.hash
+      if (hash && hash.includes('access_token')) {
+        // Supabase 会自动从 hash 中提取 token 并建立会话
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+        if (sessionError) {
+          console.warn('[Auth] OAuth 回调处理失败:', sessionError)
+        }
+        if (session?.user) {
+          user.value = session.user
+          await migrateGuestData(session.user.id)
+        }
+        // 清除 URL 中的 token（保留 hash 路由）
+        const cleanHash = hash.split('&')[0]
+        if (cleanHash.startsWith('#access_token') || cleanHash.startsWith('#/')) {
+          // 如果整个 hash 都是 token 参数，跳转到首页
+          window.location.hash = '#/'
+        }
+        return
+      }
+
       const { data: { session } } = await supabase.auth.getSession()
       if (session?.user) {
         user.value = session.user
@@ -47,6 +68,10 @@ export function useAuth() {
       // 监听认证状态变化
       supabase.auth.onAuthStateChange((event, session) => {
         user.value = session?.user || null
+        // OAuth 登录成功后自动迁移数据
+        if (event === 'SIGNED_IN' && session?.user) {
+          migrateGuestData(session.user.id)
+        }
       })
     } catch (e) {
       console.warn('[Auth] 初始化失败:', e)
@@ -106,9 +131,10 @@ export function useAuth() {
       })
 
       if (authError) {
-        error.value = authError.message === 'Invalid login credentials'
-          ? '邮箱或密码错误'
-          : authError.message
+        const msg = authError.message
+        if (msg === 'Invalid login credentials') error.value = '邮箱或密码错误'
+        else if (msg.includes('Email not confirmed')) error.value = '请先验证邮箱，或使用 Google 登录'
+        else error.value = msg
         return false
       }
 
