@@ -64,13 +64,12 @@
 
       <!-- 玄学版 -->
       <div class="mode-card" @click="requireLoginThen('/birth-info')">
-        <div style="position: absolute; top: 12px; right: 12px; padding: 3px 10px; border-radius: 20px; background: linear-gradient(135deg, #6C5CE7, #a29bfe); color: #fff; font-size: 11px; font-weight: 700;">¥9.9</div>
         <div style="display: flex; align-items: flex-start; gap: 16px;">
           <span style="font-size: 40px; line-height: 1;">🌙</span>
           <div style="flex: 1;">
             <h2 style="font-size: 18px; font-weight: 700; color: #2d3436; margin: 0 0 4px;">八字 × MBTI 命理</h2>
             <p style="font-size: 13px; color: #636e72; margin: 0 0 8px; line-height: 1.4;">结合出生八字和人格分析的综合报告</p>
-            <span class="tag-paid">¥9.9 · 约10分钟</span>
+            <span class="tag-free">免费体验 · 约10分钟</span>
           </div>
           <span style="color: #b2bec3; font-size: 20px; align-self: center;">›</span>
         </div>

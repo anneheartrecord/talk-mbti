@@ -50,6 +50,60 @@
           </div>
         </ReportCard>
 
+        <!-- 付费拦截：未付费则显示付费弹窗遮罩 -->
+        <div v-if="!hasPaid" class="relative" style="margin-top: 8px;">
+          <!-- 模糊预览 -->
+          <div style="filter: blur(8px); pointer-events: none; user-select: none; opacity: 0.5;">
+            <ReportCard title="五行分析" icon="☯️">
+              <div style="height: 120px; background: linear-gradient(180deg, #f8f8f8, #eee); border-radius: 12px;"></div>
+            </ReportCard>
+            <ReportCard title="MBTI × 命理交叉分析" icon="🔗">
+              <div style="height: 80px; background: linear-gradient(180deg, #f8f8f8, #eee); border-radius: 12px;"></div>
+            </ReportCard>
+            <ReportCard title="运势洞察" icon="🌟">
+              <div style="height: 80px; background: linear-gradient(180deg, #f8f8f8, #eee); border-radius: 12px;"></div>
+            </ReportCard>
+          </div>
+
+          <!-- 付费卡片覆盖 -->
+          <div
+            class="absolute inset-0 flex items-center justify-center"
+            style="background: rgba(255,255,255,0.85); backdrop-filter: blur(2px); border-radius: 16px;"
+          >
+            <div class="bg-white rounded-2xl shadow-2xl text-center" style="padding: 40px 32px; max-width: 360px; width: 90%;">
+              <div style="font-size: 48px; margin-bottom: 16px;">🔒</div>
+              <h3 class="font-bold text-gray-900" style="font-size: 22px; margin-bottom: 8px;">解锁完整命理报告</h3>
+              <p class="text-gray-500" style="font-size: 14px; margin-bottom: 24px; line-height: 1.6;">
+                包含五行分析、交叉解读、运势洞察、人际匹配等全部内容
+              </p>
+              <div class="font-black text-purple-600" style="font-size: 36px; margin-bottom: 20px;">¥9.9</div>
+
+              <!-- 收款二维码 -->
+              <div style="margin-bottom: 20px;">
+                <img
+                  src="/pay-qrcode.png"
+                  alt="收款二维码"
+                  style="width: 200px; height: 200px; margin: 0 auto; border-radius: 12px; border: 2px solid #f0f0f0;"
+                  onerror="this.style.display='none'"
+                />
+                <p class="text-gray-400" style="font-size: 12px; margin-top: 8px;">扫码支付 ¥9.9</p>
+              </div>
+
+              <button
+                @click="confirmPaid"
+                class="w-full bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 active:scale-[0.98] transition-all cursor-pointer"
+                style="padding: 16px 0; font-size: 17px;"
+              >
+                我已支付，查看报告 →
+              </button>
+              <p class="text-gray-400" style="font-size: 12px; margin-top: 12px;">支付后自动解锁全部内容</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 已付费：显示完整内容 -->
+        <template v-if="hasPaid">
+
         <!-- 五行分析卡 -->
         <ReportCard title="五行分析" icon="☯️" :delay="100">
           <div style="margin-bottom: 20px;">
@@ -177,6 +231,9 @@
           <p class="text-sm text-gray-400 mt-4 italic">命理与人格，是认识自己的两面镜子。</p>
         </ReportCard>
 
+        </template>
+        <!-- /已付费内容结束 -->
+
         <!-- 操作按钮 -->
         <div class="flex flex-col" style="gap: 20px; margin-top: 40px; margin-bottom: 36px;">
           <button
@@ -215,6 +272,19 @@ import ReportCard from '../components/ReportCard.vue'
 const router = useRouter()
 const report = ref(null)
 const shareText = ref('分享结果')
+const hasPaid = ref(false)
+
+// 检查是否已付费（简单本地存储方案）
+function checkPaid() {
+  const paidKey = 'mystical_paid_' + (report.value?.type || '')
+  hasPaid.value = localStorage.getItem(paidKey) === 'true'
+}
+
+function confirmPaid() {
+  const paidKey = 'mystical_paid_' + (report.value?.type || '')
+  localStorage.setItem(paidKey, 'true')
+  hasPaid.value = true
+}
 
 const letterColors = [
   'text-purple-600', 'text-indigo-500', 'text-violet-500', 'text-fuchsia-500'
@@ -300,5 +370,6 @@ onMounted(() => {
     console.error('解析报告失败:', e)
   }
   if (!report.value) router.push('/')
+  else checkPaid()
 })
 </script>
