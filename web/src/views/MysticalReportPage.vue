@@ -81,7 +81,7 @@
               <!-- 收款二维码 -->
               <div style="margin-bottom: 20px;">
                 <img
-                  src="/pay-qrcode.png"
+                  src="/pay-qrcode.jpg"
                   alt="收款二维码"
                   style="width: 200px; height: 200px; margin: 0 auto; border-radius: 12px; border: 2px solid #f0f0f0;"
                   onerror="this.style.display='none'"
