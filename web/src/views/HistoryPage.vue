@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-100">
     <!-- 顶部导航栏 -->
     <div class="bg-white shadow-sm sticky top-0 z-20">
-      <div class="max-w-xl mx-auto flex items-center" style="padding: 16px 20px;">
+      <div class="mx-auto flex items-center" style="max-width: min(580px, 100%); padding: 16px 20px;">
         <button
           @click="$router.back()"
           class="text-gray-600 hover:text-gray-900 transition-colors"
@@ -15,7 +15,7 @@
     </div>
 
     <!-- 内容区域 -->
-    <div class="max-w-xl mx-auto" style="padding: 20px 16px;">
+    <div class="mx-auto" style="max-width: min(580px, 100%); padding: 20px 16px;">
       <!-- 加载状态 -->
       <div v-if="loading" class="flex items-center justify-center" style="padding: 120px 0;">
         <div class="text-center">

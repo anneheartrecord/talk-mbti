@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-[#6C5CE7] via-[#a29bfe] to-[#dfe6e9] flex flex-col items-center justify-center relative overflow-hidden" style="padding: 40px;">
+  <div class="min-h-screen bg-gradient-to-br from-[#6C5CE7] via-[#a29bfe] to-[#dfe6e9] flex flex-col items-center justify-center relative overflow-hidden" style="padding: clamp(16px, 4vw, 40px);">
     <div class="absolute top-20 left-10 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float" />
     <div class="absolute bottom-20 right-10 w-80 h-80 bg-purple-300/20 rounded-full blur-3xl animate-float-delay" />
 
@@ -14,28 +14,28 @@
 
     <div class="relative z-10 text-center max-w-lg">
       <!-- 图标 -->
-      <div class="animate-bounce-gentle" style="font-size: 80px; margin-bottom: 50px;">🔮</div>
+      <div class="animate-bounce-gentle" style="font-size: clamp(48px, 12vw, 80px); margin-bottom: clamp(24px, 5vw, 50px);">🔮</div>
 
       <!-- 标题 -->
-      <h1 class="font-extrabold text-white tracking-tight" style="font-size: 56px; margin-bottom: 24px;">读心术</h1>
+      <h1 class="font-extrabold text-white tracking-tight" style="font-size: clamp(32px, 9vw, 56px); margin-bottom: 24px;">读心术</h1>
 
       <!-- 副标题 -->
-      <p class="text-white/80 leading-relaxed" style="font-size: 20px; margin-bottom: 60px; padding: 0 16px;">
+      <p class="text-white/80 leading-relaxed" style="font-size: clamp(15px, 4vw, 20px); margin-bottom: clamp(28px, 6vw, 60px); padding: 0 16px;">
         不做问卷，只聊天——<br class="sm:hidden" />AI 通过对话分析你的 MBTI 人格
       </p>
 
       <!-- 三个特点 -->
-      <div class="grid grid-cols-3" style="gap: 40px; margin-bottom: 60px;">
+      <div class="grid grid-cols-3" style="gap: clamp(16px, 4vw, 40px); margin-bottom: clamp(28px, 6vw, 60px);">
         <div class="flex flex-col items-center animate-fade-in-up-1" style="gap: 16px;">
-          <div class="rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center" style="width: 80px; height: 80px; font-size: 36px;">💬</div>
+          <div class="rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center" style="width: clamp(56px, 15vw, 80px); height: clamp(56px, 15vw, 80px); font-size: 36px;">💬</div>
           <span class="text-white/90 font-medium" style="font-size: 18px;">自然对话</span>
         </div>
         <div class="flex flex-col items-center animate-fade-in-up-2" style="gap: 16px;">
-          <div class="rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center" style="width: 80px; height: 80px; font-size: 36px;">🤖</div>
+          <div class="rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center" style="width: clamp(56px, 15vw, 80px); height: clamp(56px, 15vw, 80px); font-size: 36px;">🤖</div>
           <span class="text-white/90 font-medium" style="font-size: 18px;">AI 分析</span>
         </div>
         <div class="flex flex-col items-center animate-fade-in-up-3" style="gap: 16px;">
-          <div class="rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center" style="width: 80px; height: 80px; font-size: 36px;">📊</div>
+          <div class="rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center" style="width: clamp(56px, 15vw, 80px); height: clamp(56px, 15vw, 80px); font-size: 36px;">📊</div>
           <span class="text-white/90 font-medium" style="font-size: 18px;">即时报告</span>
         </div>
       </div>
@@ -44,7 +44,7 @@
       <button
         @click="$router.push('/mode')"
         class="bg-white text-[#6C5CE7] font-bold rounded-full shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer animate-pulse-soft"
-        style="padding: 24px 80px; font-size: 24px;"
+        style="padding: 18px clamp(40px, 10vw, 80px); font-size: clamp(18px, 4.5vw, 24px);"
       >
         开始聊天 →
       </button>

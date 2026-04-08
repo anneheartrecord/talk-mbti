@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-100">
     <!-- 顶部导航 -->
     <div class="bg-white shadow-sm sticky top-0 z-20">
-      <div class="mx-auto flex items-center" style="max-width: 580px; padding: 16px 20px;">
+      <div class="mx-auto flex items-center" style="max-width: min(580px, 100%); padding: 16px 20px;">
         <button
           @click="$router.back()"
           class="text-gray-600 hover:text-[#6C5CE7] transition-colors"
@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <div class="mx-auto" style="max-width: 580px; padding: 20px;">
+    <div class="mx-auto" style="max-width: min(580px, 100%); padding: 20px;">
       <!-- 用户信息卡片 -->
       <div class="bg-white rounded-2xl shadow-lg" style="padding: 32px 24px; margin-bottom: 16px;">
         <div class="flex items-center" style="gap: 16px;">

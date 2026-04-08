@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gray-100 flex items-center justify-center" style="padding: 20px;">
-    <div class="w-full bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden" style="max-width: 580px; height: 92vh;">
+  <div class="min-h-screen bg-gray-100 flex items-center justify-center" style="padding: clamp(8px, 2vw, 20px);">
+    <div class="w-full bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden" style="max-width: min(580px, 100%); height: 92vh;">
 
       <!-- 顶部栏 -->
       <header class="shrink-0 flex items-center justify-between border-b border-gray-100" style="padding: 16px 24px;">
@@ -36,7 +36,7 @@
       <main
         ref="messageContainer"
         class="flex-1 overflow-y-auto"
-        style="padding: 28px 24px;"
+        style="padding: clamp(12px, 3vw, 28px) clamp(12px, 3vw, 24px);"
       >
         <div v-if="isGeneratingReport" class="flex flex-col items-center justify-center h-full" style="gap: 24px;">
           <div class="animate-spin-slow" style="font-size: 64px;">🔮</div>
@@ -57,7 +57,7 @@
       </main>
 
       <!-- 底部输入栏 -->
-      <footer class="shrink-0 border-t border-gray-100" style="padding: 20px 24px;">
+      <footer class="shrink-0 border-t border-gray-100" style="padding: clamp(12px, 3vw, 20px) clamp(12px, 3vw, 24px);">
         <div v-if="error" class="text-red-400" style="font-size: 14px; margin-bottom: 12px;">{{ error }}</div>
 
         <div class="flex items-end" style="gap: 16px;">

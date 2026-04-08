@@ -12,7 +12,7 @@
       </div>
 
       <!-- 卡片 -->
-      <div class="bg-white rounded-2xl shadow-xl" style="padding: 32px 28px;">
+      <div class="bg-white rounded-2xl shadow-xl" style="padding: clamp(24px, 5vw, 32px) clamp(20px, 4vw, 28px);">
         <!-- Tab 切换 -->
         <div class="flex rounded-xl bg-gray-100" style="padding: 4px; margin-bottom: 28px;">
           <button
@@ -52,7 +52,7 @@
               placeholder="your@email.com"
               required
               class="w-full border border-gray-200 rounded-xl outline-none focus:border-[#6C5CE7] focus:ring-2 focus:ring-purple-100 transition-all"
-              style="padding: 14px 16px; font-size: 15px;"
+              style="padding: clamp(12px, 3vw, 14px) clamp(12px, 3vw, 16px); font-size: 15px;"
             />
           </div>
           <div style="margin-bottom: 28px;">
@@ -63,7 +63,7 @@
               placeholder="请输入密码"
               required
               class="w-full border border-gray-200 rounded-xl outline-none focus:border-[#6C5CE7] focus:ring-2 focus:ring-purple-100 transition-all"
-              style="padding: 14px 16px; font-size: 15px;"
+              style="padding: clamp(12px, 3vw, 14px) clamp(12px, 3vw, 16px); font-size: 15px;"
             />
           </div>
           <button
@@ -85,7 +85,7 @@
               type="text"
               placeholder="你的昵称"
               class="w-full border border-gray-200 rounded-xl outline-none focus:border-[#6C5CE7] focus:ring-2 focus:ring-purple-100 transition-all"
-              style="padding: 14px 16px; font-size: 15px;"
+              style="padding: clamp(12px, 3vw, 14px) clamp(12px, 3vw, 16px); font-size: 15px;"
             />
           </div>
           <div style="margin-bottom: 20px;">
@@ -96,7 +96,7 @@
               placeholder="your@email.com"
               required
               class="w-full border border-gray-200 rounded-xl outline-none focus:border-[#6C5CE7] focus:ring-2 focus:ring-purple-100 transition-all"
-              style="padding: 14px 16px; font-size: 15px;"
+              style="padding: clamp(12px, 3vw, 14px) clamp(12px, 3vw, 16px); font-size: 15px;"
             />
           </div>
           <div style="margin-bottom: 28px;">
@@ -107,7 +107,7 @@
               placeholder="至少 6 位密码"
               required
               class="w-full border border-gray-200 rounded-xl outline-none focus:border-[#6C5CE7] focus:ring-2 focus:ring-purple-100 transition-all"
-              style="padding: 14px 16px; font-size: 15px;"
+              style="padding: clamp(12px, 3vw, 14px) clamp(12px, 3vw, 16px); font-size: 15px;"
             />
           </div>
           <button

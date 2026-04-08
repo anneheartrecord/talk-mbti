@@ -12,10 +12,10 @@
     <div
       style="
         width: 100%;
-        max-width: 460px;
+        max-width: min(460px, 100%);
         background: #fff;
         border-radius: 24px;
-        padding: 40px 32px;
+        padding: clamp(28px, 6vw, 40px) clamp(20px, 4vw, 32px);
         box-shadow: 0 20px 60px rgba(108, 92, 231, 0.3);
       "
     >
@@ -42,7 +42,7 @@
               v-model="birthInfo.year"
               style="
                 width: 100%;
-                padding: 14px 16px;
+                padding: clamp(12px, 3vw, 14px) 16px;
                 font-size: 16px;
                 border: 2px solid #f0ecfc;
                 border-radius: 12px;
@@ -74,7 +74,7 @@
               v-model="birthInfo.month"
               style="
                 width: 100%;
-                padding: 14px 16px;
+                padding: clamp(12px, 3vw, 14px) 16px;
                 font-size: 16px;
                 border: 2px solid #f0ecfc;
                 border-radius: 12px;
@@ -106,7 +106,7 @@
               v-model="birthInfo.day"
               style="
                 width: 100%;
-                padding: 14px 16px;
+                padding: clamp(12px, 3vw, 14px) 16px;
                 font-size: 16px;
                 border: 2px solid #f0ecfc;
                 border-radius: 12px;
@@ -138,7 +138,7 @@
               v-model="birthInfo.shichen"
               style="
                 width: 100%;
-                padding: 14px 16px;
+                padding: clamp(12px, 3vw, 14px) 16px;
                 font-size: 16px;
                 border: 2px solid #f0ecfc;
                 border-radius: 12px;

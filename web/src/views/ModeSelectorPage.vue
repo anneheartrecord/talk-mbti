@@ -21,7 +21,7 @@
     </div>
 
     <!-- 模式卡片列表 -->
-    <div style="width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 16px;">
+    <div style="width: 100%; max-width: min(460px, 100%); display: flex; flex-direction: column; gap: 16px;">
 
       <!-- 标准版 -->
       <div class="mode-card" @click="goTo('/tags')">
@@ -29,8 +29,7 @@
           <span style="font-size: 40px; line-height: 1;">🔮</span>
           <div style="flex: 1;">
             <h2 style="font-size: 18px; font-weight: 700; color: #2d3436; margin: 0 0 4px;">MBTI 人格测试</h2>
-            <p style="font-size: 13px; color: #636e72; margin: 0 0 8px; line-height: 1.4;">通过自然对话分析你的人格类型</p>
-            <span class="tag-free">免费</span>
+            <p style="font-size: 13px; color: #636e72; margin: 0; line-height: 1.4;">通过自然对话分析你的人格类型</p>
           </div>
           <span style="color: #b2bec3; font-size: 20px; align-self: center;">›</span>
         </div>
@@ -42,8 +41,7 @@
           <span style="font-size: 40px; line-height: 1;">🎓</span>
           <div style="flex: 1;">
             <h2 style="font-size: 18px; font-weight: 700; color: #2d3436; margin: 0 0 4px;">学生专业推荐</h2>
-            <p style="font-size: 13px; color: #636e72; margin: 0 0 8px; line-height: 1.4;">分析人格类型 + 推荐匹配专业</p>
-            <span class="tag-free">免费</span>
+            <p style="font-size: 13px; color: #636e72; margin: 0; line-height: 1.4;">分析人格类型 + 推荐匹配专业</p>
           </div>
           <span style="color: #b2bec3; font-size: 20px; align-self: center;">›</span>
         </div>
@@ -104,7 +102,7 @@ function requireLoginThen(path) {
 .mode-card {
   background: #fff;
   border-radius: 16px;
-  padding: 24px 20px;
+  padding: clamp(18px, 4vw, 24px) clamp(16px, 3.5vw, 20px);
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);

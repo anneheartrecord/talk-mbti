@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-100 flex items-center justify-center" style="padding: 20px;">
-    <div class="w-full bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden" style="max-width: 580px; min-height: 90vh;">
+    <div class="w-full bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden" style="max-width: min(580px, 100%); min-height: 90vh;">
       <!-- 顶部跳过 -->
       <div class="flex justify-end shrink-0" style="padding: 24px 32px 8px;">
         <button
@@ -13,13 +13,13 @@
       </div>
 
       <!-- 主内容区 -->
-      <div class="flex-1 flex flex-col items-center justify-center" style="padding: 0 48px;">
+      <div class="flex-1 flex flex-col items-center justify-center" style="padding: 0 clamp(16px, 4vw, 48px);">
         <transition name="slide" mode="out-in">
           <!-- 标签分类步骤 -->
           <div v-if="currentStep < filteredCategories.length" :key="currentStep" class="w-full">
             <div class="text-center" style="margin-bottom: 48px;">
-              <div style="font-size: 72px; margin-bottom: 28px;">{{ currentCategory.icon }}</div>
-              <h2 class="font-bold text-gray-900" style="font-size: 26px; margin-bottom: 16px;">
+              <div style="font-size: clamp(48px, 12vw, 72px); margin-bottom: 28px;">{{ currentCategory.icon }}</div>
+              <h2 class="font-bold text-gray-900" style="font-size: clamp(20px, 5vw, 26px); margin-bottom: 16px;">
                 {{ currentCategory.label }}
                 <span class="font-normal text-gray-400" style="font-size: 14px; margin-left: 8px;">
                   （{{ currentCategory.type === 'multi' ? '多选' : '单选' }}）
@@ -41,7 +41,7 @@
                 :key="option"
                 @click="toggleOption(option)"
                 class="rounded-xl font-medium border-2 transition-all duration-150 cursor-pointer select-none"
-                style="padding: 18px 20px; font-size: 16px;"
+                style="padding: clamp(12px, 3vw, 18px) clamp(14px, 3.5vw, 20px); font-size: clamp(14px, 3.5vw, 16px);"
                 :class="isSelected(option)
                   ? 'bg-gray-900 text-white border-gray-900 shadow-md'
                   : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'"
@@ -53,8 +53,8 @@
 
           <!-- 自定义标签步骤 -->
           <div v-else-if="currentStep === filteredCategories.length" :key="'custom'" class="w-full text-center">
-            <div style="font-size: 72px; margin-bottom: 28px;">✏️</div>
-            <h2 class="font-bold text-gray-900" style="font-size: 26px; margin-bottom: 16px;">还有什么想说的？</h2>
+            <div style="font-size: clamp(48px, 12vw, 72px); margin-bottom: 28px;">✏️</div>
+            <h2 class="font-bold text-gray-900" style="font-size: clamp(20px, 5vw, 26px); margin-bottom: 16px;">还有什么想说的？</h2>
             <p class="text-gray-400" style="font-size: 16px; margin-bottom: 40px;">随便补充一句，让 AI 更了解你（可跳过）</p>
 
             <input
