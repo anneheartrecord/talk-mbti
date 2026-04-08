@@ -220,18 +220,22 @@ onMounted(async () => {
   // 如果没有报告，尝试从 Supabase 读最近一条
   if (!mbtiType.value && supabase) {
     try {
-      const userId = useAuthGlobal().getEffectiveUserId()
-      const { data } = await supabase
-        .from('mbti_results')
-        .select('mbti_type, cognitive_stack')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single()
-      if (data) {
-        mbtiType.value = data.mbti_type
-        mbtiInput.value = data.mbti_type
-        cognitiveStack.value = data.cognitive_stack
+      const auth = useAuthGlobal()
+      // 访客用户不查数据库
+      if (!auth.isGuest.value) {
+        const userId = auth.getEffectiveUserId()
+        const { data } = await supabase
+          .from('mbti_results')
+          .select('mbti_type, cognitive_stack')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+        if (data) {
+          mbtiType.value = data.mbti_type
+          mbtiInput.value = data.mbti_type
+          cognitiveStack.value = data.cognitive_stack
+        }
       }
     } catch (e) {
       // 没有历史记录，显示输入框
